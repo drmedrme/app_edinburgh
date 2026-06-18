@@ -1,0 +1,1389 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Edinburgh Festival Planner</title>
+  <link rel="preconnect" href="https://unpkg.com">
+  <link rel="preconnect" href="https://tile.openstreetmap.org">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <style>
+    :root {
+      --ink: #17211f;
+      --muted: #5c6864;
+      --paper: #f7f4ed;
+      --panel: #ffffff;
+      --line: #dcd8cc;
+      --stone: #394541;
+      --heather: #6f3d56;
+      --gold: #c89432;
+      --moss: #55715d;
+      --sky: #dbe8e5;
+      --rose: #b75d4d;
+      --shadow: 0 14px 34px rgba(28, 35, 32, 0.12);
+      --radius: 8px;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        linear-gradient(180deg, rgba(219, 232, 229, 0.78), rgba(247, 244, 237, 0.96) 420px),
+        var(--paper);
+      line-height: 1.5;
+    }
+
+    button,
+    input,
+    select,
+    textarea {
+      font: inherit;
+    }
+
+    a {
+      color: #315f58;
+      text-underline-offset: 0.18em;
+    }
+
+    .shell {
+      width: min(1420px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(247, 244, 237, 0.92);
+      border-bottom: 1px solid rgba(23, 33, 31, 0.12);
+      backdrop-filter: blur(14px);
+    }
+
+    .topbar-inner {
+      min-height: 68px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+    }
+
+    .brand {
+      display: grid;
+      gap: 2px;
+      min-width: 220px;
+    }
+
+    .brand strong {
+      font-size: clamp(1.08rem, 2.2vw, 1.34rem);
+      line-height: 1.1;
+      letter-spacing: 0;
+    }
+
+    .brand span {
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .nav {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 6px;
+    }
+
+    .nav a,
+    .icon-button,
+    .copy-button {
+      min-height: 38px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border: 1px solid rgba(23, 33, 31, 0.14);
+      border-radius: var(--radius);
+      background: var(--panel);
+      color: var(--ink);
+      padding: 8px 11px;
+      text-decoration: none;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: transform 140ms ease, border-color 140ms ease, background 140ms ease;
+    }
+
+    .nav a:hover,
+    .icon-button:hover,
+    .copy-button:hover {
+      transform: translateY(-1px);
+      border-color: rgba(111, 61, 86, 0.38);
+      background: #fbfaf6;
+    }
+
+    .primary-button {
+      background: var(--stone);
+      border-color: var(--stone);
+      color: #fff;
+    }
+
+    .primary-button:hover {
+      background: #47534f;
+      color: #fff;
+    }
+
+    .nav svg,
+    .icon-button svg,
+    .copy-button svg,
+    .info-card svg {
+      width: 17px;
+      height: 17px;
+      stroke-width: 2;
+      flex: 0 0 auto;
+    }
+
+    main {
+      padding: 28px 0 54px;
+    }
+
+    .overview {
+      display: grid;
+      grid-template-columns: minmax(0, 1.25fr) minmax(340px, 0.75fr);
+      gap: 18px;
+      align-items: stretch;
+    }
+
+    .panel,
+    .day-card,
+    .info-card,
+    .checklist,
+    .notes-panel {
+      border: 1px solid rgba(23, 33, 31, 0.11);
+      border-radius: var(--radius);
+      background: var(--panel);
+      box-shadow: var(--shadow);
+    }
+
+    .map-panel {
+      overflow: hidden;
+      min-height: 620px;
+      display: grid;
+      grid-template-rows: auto 1fr;
+    }
+
+    .panel-head {
+      padding: 18px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 14px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .panel-head h1,
+    .panel-head h2,
+    .section-title h2,
+    .compact-title {
+      margin: 0;
+      line-height: 1.12;
+      letter-spacing: 0;
+    }
+
+    .panel-head h1 {
+      max-width: 780px;
+      font-size: clamp(1.45rem, 3.8vw, 2.55rem);
+    }
+
+    .panel-head h2,
+    .section-title h2 {
+      font-size: clamp(1.3rem, 2.4vw, 1.8rem);
+    }
+
+    .subtitle,
+    .section-title p,
+    .summary-block p,
+    .info-card p {
+      color: var(--muted);
+    }
+
+    .subtitle {
+      max-width: 780px;
+      margin: 8px 0 0;
+    }
+
+    .pill-row {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .pill {
+      min-height: 30px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 9px;
+      border: 1px solid rgba(23, 33, 31, 0.1);
+      border-radius: 999px;
+      background: #eff4ef;
+      color: #273833;
+      font-size: 0.84rem;
+      white-space: nowrap;
+    }
+
+    .pill svg {
+      width: 14px;
+      height: 14px;
+    }
+
+    .pill.gold {
+      background: #fff6dc;
+      border-color: #ead48d;
+      color: #60450d;
+    }
+
+    .pill.heather {
+      background: #f8edf3;
+      border-color: #e7c5d6;
+      color: #69324c;
+    }
+
+    #map,
+    .map-fallback {
+      min-height: 530px;
+      position: relative;
+      z-index: 1;
+      overflow: hidden;
+      background: var(--sky);
+    }
+
+    .map-fallback {
+      display: none;
+      place-items: center;
+      padding: 28px;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    .numbered-marker {
+      min-width: 28px;
+      height: 28px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 7px;
+      border: 3px solid #fff;
+      border-radius: 999px;
+      background: var(--heather);
+      color: #fff;
+      font-size: 0.78rem;
+      font-weight: 800;
+      line-height: 1;
+      white-space: nowrap;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    .numbered-marker.base {
+      background: var(--stone);
+    }
+
+    .numbered-marker.food {
+      background: var(--moss);
+    }
+
+    .route-summary {
+      display: grid;
+      gap: 14px;
+      padding: 18px;
+    }
+
+    .summary-block {
+      border-left: 4px solid var(--heather);
+      padding: 2px 0 2px 12px;
+    }
+
+    .summary-block h2,
+    .summary-block h3 {
+      margin: 0 0 6px;
+      font-size: 1rem;
+      letter-spacing: 0;
+    }
+
+    .summary-block p {
+      margin: 0;
+    }
+
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .stat {
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fbfdfb;
+    }
+
+    .stat strong {
+      display: block;
+      color: var(--heather);
+      font-size: 1.16rem;
+      line-height: 1.1;
+      overflow-wrap: anywhere;
+    }
+
+    .stat span {
+      color: var(--muted);
+      font-size: 0.86rem;
+    }
+
+    .section {
+      margin-top: 28px;
+    }
+
+    .section-title {
+      margin-bottom: 14px;
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .section-title p {
+      max-width: 780px;
+      margin: 6px 0 0;
+    }
+
+    .days {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+    }
+
+    .day-card {
+      min-width: 0;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(300px, 0.48fr);
+      grid-template-areas: "main aside";
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(28, 35, 32, 0.08);
+    }
+
+    .day-main {
+      grid-area: main;
+      min-width: 0;
+      display: grid;
+      align-content: start;
+    }
+
+    .day-card header {
+      padding: 13px;
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      border-bottom: 1px solid var(--line);
+      background: #fbfaf6;
+    }
+
+    .day-label {
+      display: grid;
+      gap: 2px;
+    }
+
+    .day-label strong {
+      font-size: 0.98rem;
+      line-height: 1.14;
+    }
+
+    .day-label span {
+      color: var(--muted);
+      font-size: 0.82rem;
+    }
+
+    .day-badge {
+      min-width: 38px;
+      height: 38px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: #efe3ea;
+      color: var(--heather);
+      font-weight: 800;
+    }
+
+    .day-card .route,
+    .day-card .details,
+    .day-card footer {
+      padding: 13px;
+    }
+
+    .day-card .route {
+      border-bottom: 1px solid var(--line);
+    }
+
+    .route strong {
+      display: block;
+      line-height: 1.2;
+    }
+
+    .route span {
+      display: block;
+      margin-top: 5px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .day-card .details {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(185px, 1fr));
+      gap: 10px;
+    }
+
+    .detail-item {
+      display: grid;
+      gap: 3px;
+    }
+
+    .detail-item span {
+      color: var(--muted);
+      font-size: 0.78rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .detail-item strong,
+    .detail-item p {
+      margin: 0;
+      font-size: 0.92rem;
+      font-weight: 600;
+    }
+
+    .detail-item p {
+      color: #33403c;
+      font-weight: 400;
+    }
+
+    .day-card footer {
+      display: grid;
+      grid-template-columns: minmax(160px, 220px) minmax(0, 1fr);
+      gap: 8px;
+      border-top: 1px solid var(--line);
+      background: #fdfcf8;
+    }
+
+    .status-select,
+    .note-field,
+    .person-input {
+      width: 100%;
+      border: 1px solid #cbc8bb;
+      border-radius: var(--radius);
+      background: #fff;
+      color: var(--ink);
+    }
+
+    .status-select {
+      height: 36px;
+      padding: 0 9px;
+    }
+
+    .note-field {
+      min-height: 88px;
+      padding: 9px;
+      resize: vertical;
+    }
+
+    .day-aside {
+      grid-area: aside;
+      min-height: 260px;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      gap: 8px;
+      padding: 13px;
+      border-left: 1px solid var(--line);
+      background:
+        linear-gradient(135deg, rgba(255, 255, 255, 0.16) 0 25%, transparent 25% 50%, rgba(255, 255, 255, 0.12) 50% 75%, transparent 75%) 0 0 / 34px 34px,
+        linear-gradient(160deg, #e7e0d0, #d8e5df);
+    }
+
+    .venue-card {
+      display: grid;
+      gap: 9px;
+      align-content: start;
+      padding: 12px;
+      border: 1px solid rgba(23, 33, 31, 0.12);
+      border-radius: 6px;
+      background: rgba(255, 255, 255, 0.82);
+    }
+
+    .venue-card strong {
+      line-height: 1.2;
+    }
+
+    .venue-card span {
+      color: var(--muted);
+      font-size: 0.88rem;
+    }
+
+    .venue-card a {
+      font-weight: 800;
+      text-decoration: none;
+    }
+
+    .venue-card a:hover {
+      text-decoration: underline;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .info-card,
+    .checklist,
+    .notes-panel {
+      padding: 16px;
+      box-shadow: 0 10px 30px rgba(28, 35, 32, 0.08);
+    }
+
+    .info-card h3,
+    .checklist h3,
+    .notes-panel h3 {
+      margin: 0 0 10px;
+      font-size: 1.04rem;
+    }
+
+    .info-card h3 {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .info-card h3 svg {
+      color: var(--heather);
+    }
+
+    .info-card p {
+      margin: 0 0 10px;
+    }
+
+    .info-card ul,
+    .source-list {
+      margin: 0;
+      padding-left: 18px;
+      color: #33403c;
+    }
+
+    .info-card li + li,
+    .source-list li + li {
+      margin-top: 6px;
+    }
+
+    .split {
+      display: grid;
+      grid-template-columns: minmax(0, 0.9fr) minmax(360px, 0.75fr);
+      gap: 14px;
+      align-items: start;
+    }
+
+    .check-row {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      align-items: start;
+      gap: 9px;
+      padding: 8px 0;
+      border-top: 1px solid var(--line);
+    }
+
+    .check-row:first-of-type {
+      border-top: 0;
+    }
+
+    .check-row input {
+      width: 18px;
+      height: 18px;
+      margin-top: 2px;
+      accent-color: var(--heather);
+    }
+
+    .check-row span {
+      color: #26352f;
+    }
+
+    .check-row small {
+      display: block;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    .person-form {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .person-input {
+      height: 38px;
+      padding: 0 10px;
+    }
+
+    .people {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      gap: 8px;
+    }
+
+    .people li {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 8px;
+      align-items: center;
+      padding: 9px 10px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fbfdfb;
+      overflow-wrap: anywhere;
+    }
+
+    .remove-person {
+      min-width: 28px;
+      min-height: 28px;
+      border: 0;
+      border-radius: 6px;
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+    }
+
+    .remove-person:hover {
+      color: var(--rose);
+      background: #fff0ed;
+    }
+
+    .copy-toast {
+      position: fixed;
+      left: 50%;
+      bottom: 18px;
+      z-index: 1000;
+      transform: translate(-50%, 18px);
+      opacity: 0;
+      pointer-events: none;
+      max-width: min(92vw, 420px);
+      padding: 10px 12px;
+      border-radius: var(--radius);
+      background: var(--stone);
+      color: #fff;
+      box-shadow: 0 10px 28px rgba(28, 35, 32, 0.22);
+      font-weight: 800;
+      text-align: center;
+      transition: opacity 160ms ease, transform 160ms ease;
+    }
+
+    .copy-toast.visible {
+      opacity: 1;
+      transform: translate(-50%, 0);
+    }
+
+    .print-only {
+      display: none;
+    }
+
+    @media (max-width: 1120px) {
+      .overview,
+      .split {
+        grid-template-columns: 1fr;
+      }
+
+      .grid-3 {
+        grid-template-columns: 1fr;
+      }
+
+      .day-card {
+        grid-template-columns: minmax(0, 1fr) minmax(260px, 0.48fr);
+      }
+    }
+
+    @media (max-width: 760px) {
+      .shell {
+        width: min(100% - 20px, 720px);
+      }
+
+      .topbar-inner {
+        align-items: flex-start;
+        flex-direction: column;
+        padding: 11px 0;
+      }
+
+      .nav {
+        width: 100%;
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .nav a,
+      .icon-button,
+      .copy-button {
+        width: 100%;
+        min-width: 0;
+      }
+
+      main {
+        padding-top: 14px;
+      }
+
+      .panel-head,
+      .route-summary {
+        padding: 15px;
+      }
+
+      .section-title {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .day-card {
+        grid-template-columns: 1fr;
+        grid-template-areas:
+          "main"
+          "aside";
+      }
+
+      .day-aside {
+        min-height: auto;
+        border-left: 0;
+        border-top: 1px solid var(--line);
+      }
+
+      .day-card footer,
+      .person-form {
+        grid-template-columns: 1fr;
+      }
+
+      #map,
+      .map-fallback {
+        min-height: 420px;
+      }
+
+      .map-panel {
+        min-height: 500px;
+      }
+    }
+
+    @media print {
+      @page {
+        size: A4;
+        margin: 12mm;
+      }
+
+      * {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+
+      body {
+        background: #fff;
+        font-size: 9.2pt;
+        line-height: 1.35;
+      }
+
+      a {
+        color: inherit;
+        text-decoration: none;
+      }
+
+      .topbar,
+      #map,
+      .map-fallback,
+      .status-select,
+      .note-field,
+      .person-form,
+      .remove-person,
+      .copy-button,
+      .copy-toast {
+        display: none !important;
+      }
+
+      .print-only {
+        display: block !important;
+      }
+
+      .shell {
+        width: 100%;
+        max-width: none;
+      }
+
+      main {
+        padding: 0;
+      }
+
+      .overview,
+      .split,
+      .grid-3 {
+        display: block;
+      }
+
+      .overview {
+        break-after: page;
+      }
+
+      .panel,
+      .day-card,
+      .info-card,
+      .checklist,
+      .notes-panel {
+        box-shadow: none;
+        break-inside: avoid;
+        margin-bottom: 12px;
+      }
+
+      .panel-head {
+        display: block;
+        padding: 0 0 4mm;
+      }
+
+      .panel-head h1 {
+        font-size: 22pt;
+      }
+
+      .day-card {
+        display: block;
+      }
+
+      .day-aside {
+        border-left: 0;
+        border-top: 1px solid var(--line);
+      }
+
+      .day-card footer {
+        display: block;
+      }
+
+      .print-status,
+      .print-note-text {
+        margin-top: 4px;
+        color: var(--muted);
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="shell topbar-inner">
+      <div class="brand" aria-label="Edinburgh Festival planner">
+        <strong>Edinburgh Festival Planner</strong>
+        <span>Shared itinerary board for Scotland</span>
+      </div>
+      <nav class="nav" aria-label="Planner navigation">
+        <a href="#itinerary"><i data-lucide="calendar-days"></i>Itinerary</a>
+        <a href="#group"><i data-lucide="users"></i>Group</a>
+        <a href="#planning"><i data-lucide="list-checks"></i>Planning</a>
+        <button class="icon-button primary-button" type="button" onclick="window.print()"><i data-lucide="printer"></i>Print</button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="shell">
+    <section class="overview" aria-label="Trip overview">
+      <article class="panel map-panel">
+        <div class="panel-head">
+          <div>
+            <h1>Festival days, venues, tickets, and meet-ups in one place</h1>
+            <p class="subtitle">A lightweight framework for the Edinburgh trip. Replace the placeholder days with the final travel, show, meal, and meet-up details as bookings firm up.</p>
+          </div>
+          <div class="pill-row" aria-label="Trip facts">
+            <span class="pill heather"><i data-lucide="map-pin"></i>Edinburgh</span>
+            <span class="pill gold"><i data-lucide="ticket"></i>Shows TBC</span>
+            <span class="pill"><i data-lucide="cloud-sun"></i>Indoor/outdoor mix</span>
+          </div>
+        </div>
+        <div id="map" role="img" aria-label="Interactive map of Edinburgh Festival planning locations"></div>
+        <div id="mapFallback" class="map-fallback">
+          <p>The live map needs Leaflet and OpenStreetMap access. The itinerary and print view still work offline after the page loads.</p>
+        </div>
+      </article>
+
+      <aside class="panel">
+        <div class="panel-head">
+          <div>
+            <h2>Working Shape</h2>
+            <p class="subtitle">Designed for a public GitHub Pages link with private details kept out of git.</p>
+          </div>
+        </div>
+        <div class="route-summary">
+          <div class="summary-block">
+            <h3>Update flow</h3>
+            <p>Edit the checked-in placeholder itinerary when plans become public. Use browser-only notes for names, references, addresses, and ticket details.</p>
+          </div>
+          <div class="summary-block">
+            <h3>Shared use</h3>
+            <p>Everyone can open the same page. Each person can keep their own statuses, notes, checklist state, and attendee list on their device.</p>
+          </div>
+          <div class="stat-grid">
+            <div class="stat">
+              <strong>6</strong>
+              <span>starter itinerary slots</span>
+            </div>
+            <div class="stat">
+              <strong>0</strong>
+              <span>backend services required</span>
+            </div>
+            <div class="stat">
+              <strong>Pages</strong>
+              <span>ready for GitHub hosting</span>
+            </div>
+            <div class="stat">
+              <strong>Local</strong>
+              <span>browser notes only</span>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </section>
+
+    <section class="section" id="itinerary">
+      <div class="section-title">
+        <div>
+          <h2>Itinerary Board</h2>
+          <p>Draft slots for travel, festival shows, meals, and fallback options. Status and notes are saved in this browser.</p>
+        </div>
+        <button class="copy-button" type="button" data-copy-template="summary"><i data-lucide="copy"></i>Copy summary</button>
+      </div>
+      <div class="days" id="dayCards" aria-label="Festival itinerary"></div>
+    </section>
+
+    <section class="section">
+      <div class="grid-3">
+        <article class="info-card">
+          <h3><i data-lucide="ticket"></i>Tickets</h3>
+          <p>Track each show against the day card, then add booking references only to private notes or the ticket wallet.</p>
+          <ul>
+            <li>Mark must-see events as Ticket needed until booked.</li>
+            <li>Keep QR codes and order numbers out of the public repo.</li>
+            <li>Use the print view for a clean travel briefing.</li>
+          </ul>
+        </article>
+        <article class="info-card">
+          <h3><i data-lucide="train"></i>Getting Around</h3>
+          <p>Waverley, tram stops, buses, walking time, and taxi pinch points can be added as the final group shape emerges.</p>
+          <ul>
+            <li>Leave extra time near the Royal Mile and Old Town.</li>
+            <li>Put meet-up points on the map before busy days.</li>
+            <li>Keep accommodation addresses private.</li>
+          </ul>
+        </article>
+        <article class="info-card">
+          <h3><i data-lucide="utensils"></i>Food</h3>
+          <p>Use meal slots to avoid making every decision between shows. Add restaurant names once reservations are real.</p>
+          <ul>
+            <li>Reserve group meals where timing matters.</li>
+            <li>Capture dietary notes privately.</li>
+            <li>Keep a low-effort fallback near each venue cluster.</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section class="section split" id="group">
+      <article class="notes-panel">
+        <h3>People Going</h3>
+        <form class="person-form" id="personForm">
+          <input class="person-input" id="personInput" type="text" autocomplete="off" placeholder="Add a name locally">
+          <button class="copy-button primary-button" type="submit"><i data-lucide="plus"></i>Add</button>
+        </form>
+        <ul class="people" id="peopleList"></ul>
+        <p class="print-only">Attendee names are browser-local. Do not commit private group details to the repo.</p>
+      </article>
+
+      <article class="checklist" id="planning">
+        <h3>Planning Checklist</h3>
+        <div id="checks"></div>
+      </article>
+    </section>
+
+    <section class="section">
+      <article class="info-card">
+        <h3><i data-lucide="external-link"></i>Public Reference Links</h3>
+        <ul class="source-list">
+          <li><a href="https://www.edfringe.com/" target="_blank" rel="noreferrer">Edinburgh Festival Fringe</a></li>
+          <li><a href="https://www.eif.co.uk/" target="_blank" rel="noreferrer">Edinburgh International Festival</a></li>
+          <li><a href="https://www.edbookfest.co.uk/" target="_blank" rel="noreferrer">Edinburgh International Book Festival</a></li>
+          <li><a href="https://www.edinburgh.gov.uk/" target="_blank" rel="noreferrer">City of Edinburgh Council</a></li>
+        </ul>
+      </article>
+    </section>
+  </main>
+
+  <div class="copy-toast" id="copyToast" role="status" aria-live="polite">Copied</div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>
+    const itinerary = [
+      {
+        day: "1",
+        label: "Arrival",
+        date: "Date TBC",
+        title: "Arrive, settle in, first walk through the Old Town",
+        plan: "Arrival windows, bag drop, accommodation check-in, then an easy Royal Mile or New Town orientation.",
+        venue: "Waverley / Old Town",
+        area: "Central Edinburgh",
+        ticket: "No show locked",
+        food: "Casual first-night meal near the stay",
+        fallback: "Keep this light if trains or flights slip.",
+        coords: [55.9521, -3.1890],
+        link: "https://www.nationalrail.co.uk/stations/edinburgh-waverley/"
+      },
+      {
+        day: "2",
+        label: "Festival Core",
+        date: "Date TBC",
+        title: "Royal Mile, Fringe hub, and first booked show",
+        plan: "Use the day to get bearings around the main festival drag, then anchor the evening around one confirmed event.",
+        venue: "Royal Mile",
+        area: "Old Town",
+        ticket: "Ticket needed",
+        food: "Lunch flexible, dinner reservation useful",
+        fallback: "Street performers and walk-up listings can fill gaps.",
+        coords: [55.9507, -3.1869],
+        link: "https://www.edfringe.com/"
+      },
+      {
+        day: "3",
+        label: "Theatre",
+        date: "Date TBC",
+        title: "Theatre or comedy cluster day",
+        plan: "Group two or three nearby shows so the day is not lost walking across town between venues.",
+        venue: "Pleasance Courtyard",
+        area: "Southside",
+        ticket: "Shows TBC",
+        food: "Quick meal between venues",
+        fallback: "Drop the middle event if the group needs a slower pace.",
+        coords: [55.9466, -3.1819],
+        link: "https://www.pleasance.co.uk/"
+      },
+      {
+        day: "4",
+        label: "Culture",
+        date: "Date TBC",
+        title: "Gallery, book festival, or International Festival slot",
+        plan: "Keep a daytime cultural block open, then place a stronger evening event once the programme is final.",
+        venue: "Charlotte Square / New Town",
+        area: "New Town",
+        ticket: "Await programme",
+        food: "Book dinner if the evening show is fixed",
+        fallback: "National Galleries and central cafes keep this weather-proof.",
+        coords: [55.9527, -3.2074],
+        link: "https://www.edbookfest.co.uk/"
+      },
+      {
+        day: "5",
+        label: "Big Night",
+        date: "Date TBC",
+        title: "Headline event, castle-side evening, or late show",
+        plan: "Protect this slot for the trip's main event and keep the afternoon deliberately underloaded.",
+        venue: "Edinburgh Castle area",
+        area: "Castlehill",
+        ticket: "Priority booking",
+        food: "Early dinner before crowds build",
+        fallback: "Move to a New Town venue cluster if weather or tickets push the plan.",
+        coords: [55.9486, -3.1999],
+        link: "https://www.edinburghcastle.scot/"
+      },
+      {
+        day: "6",
+        label: "Departure",
+        date: "Date TBC",
+        title: "Final breakfast, last wander, departures",
+        plan: "Leave the last day loose for bags, travel windows, and one optional short event if timing allows.",
+        venue: "Waverley / airport links",
+        area: "Central Edinburgh",
+        ticket: "Optional",
+        food: "Breakfast or early lunch",
+        fallback: "Go straight to travel if the group is tired.",
+        coords: [55.9500, -3.3725],
+        link: "https://edinburghairport.com/"
+      }
+    ];
+
+    const statusOptions = ["Draft", "Ticket needed", "Booked", "Meet-up confirmed", "Travel watch", "Skip"];
+    const checklist = [
+      ["Confirm trip dates", "Replace Date TBC across the itinerary once travel dates are fixed."],
+      ["Choose must-see shows", "Add the first-pass shortlist before buying tickets."],
+      ["Book tickets", "Keep order numbers and QR codes outside the public repo."],
+      ["Confirm accommodation", "Do not publish the private address."],
+      ["Plan group meals", "Reserve only where timing or group size makes it necessary."],
+      ["Agree meet-up points", "Use public landmarks rather than private addresses."],
+      ["Print or save offline", "Use the browser print action before travel day."]
+    ];
+
+    const copyTemplates = {
+      summary: () => itinerary.map((item) => `${item.label}: ${item.title} (${item.date}) - ${item.venue}`).join("\n")
+    };
+
+    const storage = {
+      get(key, fallback) {
+        try {
+          const raw = localStorage.getItem(key);
+          return raw ? JSON.parse(raw) : fallback;
+        } catch {
+          return fallback;
+        }
+      },
+      set(key, value) {
+        localStorage.setItem(key, JSON.stringify(value));
+      }
+    };
+
+    function renderItinerary() {
+      const container = document.getElementById("dayCards");
+      const statuses = storage.get("edinburgh-statuses", {});
+      const notes = storage.get("edinburgh-notes", {});
+      container.innerHTML = itinerary.map((item) => {
+        const savedStatus = statuses[item.day] || "Draft";
+        const status = statusOptions.includes(savedStatus) ? savedStatus : "Draft";
+        const note = notes[item.day] || "";
+        return `
+          <article class="day-card">
+            <div class="day-main">
+              <header>
+                <div class="day-label">
+                  <strong>${escapeHtml(item.title)}</strong>
+                  <span>${escapeHtml(item.label)} · ${escapeHtml(item.date)}</span>
+                </div>
+                <div class="day-badge">${escapeHtml(item.day)}</div>
+              </header>
+              <div class="route">
+                <strong>${escapeHtml(item.plan)}</strong>
+                <span>${escapeHtml(item.fallback)}</span>
+              </div>
+              <div class="details">
+                <div class="detail-item"><span>Venue</span><strong>${escapeHtml(item.venue)}</strong></div>
+                <div class="detail-item"><span>Area</span><strong>${escapeHtml(item.area)}</strong></div>
+                <div class="detail-item"><span>Tickets</span><strong>${escapeHtml(item.ticket)}</strong></div>
+                <div class="detail-item"><span>Food</span><p>${escapeHtml(item.food)}</p></div>
+              </div>
+              <footer>
+                <label>
+                  <select class="status-select" data-status="${escapeHtml(item.day)}" aria-label="Status for ${escapeHtml(item.label)}">
+                    ${statusOptions.map((option) => `<option value="${escapeHtml(option)}" ${option === status ? "selected" : ""}>${escapeHtml(option)}</option>`).join("")}
+                  </select>
+                  <span class="print-only print-status" data-print-status="${escapeHtml(item.day)}">${escapeHtml(status)}</span>
+                </label>
+                <label>
+                  <textarea class="note-field" data-note="${escapeHtml(item.day)}" placeholder="Private notes for this browser">${escapeHtml(note)}</textarea>
+                  <span class="print-only print-note-text" data-print-note="${escapeHtml(item.day)}">${escapeHtml(note)}</span>
+                </label>
+              </footer>
+            </div>
+            <aside class="day-aside">
+              <div class="venue-card">
+                <strong>${escapeHtml(item.venue)}</strong>
+                <span>${escapeHtml(item.area)}</span>
+                <a href="${escapeAttribute(item.link)}" target="_blank" rel="noreferrer">Open public reference</a>
+              </div>
+            </aside>
+          </article>
+        `;
+      }).join("");
+
+      container.querySelectorAll("[data-status]").forEach((select) => {
+        select.addEventListener("change", () => {
+          const current = storage.get("edinburgh-statuses", {});
+          current[select.dataset.status] = select.value;
+          storage.set("edinburgh-statuses", current);
+          const printStatus = container.querySelector(`[data-print-status="${select.dataset.status}"]`);
+          if (printStatus) printStatus.textContent = select.value;
+        });
+      });
+
+      container.querySelectorAll("[data-note]").forEach((field) => {
+        field.addEventListener("input", () => {
+          const current = storage.get("edinburgh-notes", {});
+          current[field.dataset.note] = field.value;
+          storage.set("edinburgh-notes", current);
+          const printNote = container.querySelector(`[data-print-note="${field.dataset.note}"]`);
+          if (printNote) printNote.textContent = field.value;
+        });
+      });
+    }
+
+    function renderChecklist() {
+      const state = storage.get("edinburgh-checks", {});
+      const container = document.getElementById("checks");
+      container.innerHTML = checklist.map(([title, detail], index) => `
+        <label class="check-row">
+          <input type="checkbox" data-check="${index}" ${state[index] ? "checked" : ""}>
+          <span>${escapeHtml(title)}<small>${escapeHtml(detail)}</small></span>
+        </label>
+      `).join("");
+
+      container.querySelectorAll("[data-check]").forEach((input) => {
+        input.addEventListener("change", () => {
+          const current = storage.get("edinburgh-checks", {});
+          current[input.dataset.check] = input.checked;
+          storage.set("edinburgh-checks", current);
+        });
+      });
+    }
+
+    function renderPeople() {
+      const list = document.getElementById("peopleList");
+      const people = storage.get("edinburgh-people", []);
+      list.innerHTML = people.length ? people.map((person, index) => `
+        <li>
+          <span>${escapeHtml(person)}</span>
+          <button class="remove-person" type="button" data-remove-person="${index}" aria-label="Remove ${escapeAttribute(person)}">
+            <i data-lucide="x"></i>
+          </button>
+        </li>
+      `).join("") : `<li><span>No local names added yet.</span><span></span></li>`;
+
+      list.querySelectorAll("[data-remove-person]").forEach((button) => {
+        button.addEventListener("click", () => {
+          const current = storage.get("edinburgh-people", []);
+          current.splice(Number(button.dataset.removePerson), 1);
+          storage.set("edinburgh-people", current);
+          renderPeople();
+          createIcons();
+        });
+      });
+    }
+
+    function bindPeopleForm() {
+      document.getElementById("personForm").addEventListener("submit", (event) => {
+        event.preventDefault();
+        const input = document.getElementById("personInput");
+        const value = input.value.trim();
+        if (!value) return;
+        const people = storage.get("edinburgh-people", []);
+        people.push(value);
+        storage.set("edinburgh-people", people);
+        input.value = "";
+        renderPeople();
+        createIcons();
+      });
+    }
+
+    function initMap() {
+      const fallback = document.getElementById("mapFallback");
+      if (!window.L) {
+        fallback.style.display = "grid";
+        return;
+      }
+
+      const map = L.map("map", {
+        scrollWheelZoom: false,
+        zoomControl: true
+      });
+
+      L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        maxZoom: 19,
+        attribution: "&copy; OpenStreetMap contributors"
+      }).addTo(map);
+
+      const latlngs = itinerary.map((item) => item.coords);
+      L.polyline(latlngs, {
+        color: "#6f3d56",
+        weight: 3,
+        opacity: 0.85,
+        dashArray: "6 7"
+      }).addTo(map);
+
+      itinerary.forEach((item, index) => {
+        const className = index === 0 || index === itinerary.length - 1 ? "base" : item.food.includes("meal") ? "food" : "";
+        const icon = L.divIcon({
+          className: "",
+          html: `<span class="numbered-marker ${className}">${escapeHtml(item.day)}</span>`,
+          iconSize: [32, 32],
+          iconAnchor: [16, 16]
+        });
+        L.marker(item.coords, { icon })
+          .addTo(map)
+          .bindPopup(`<strong>${escapeHtml(item.label)}: ${escapeHtml(item.title)}</strong><br>${escapeHtml(item.venue)}<br>${escapeHtml(item.ticket)}`);
+      });
+
+      const bounds = L.latLngBounds(latlngs);
+      map.fitBounds(bounds, { padding: [34, 34], maxZoom: 13 });
+      setTimeout(() => map.invalidateSize(), 120);
+      window.addEventListener("resize", () => map.invalidateSize());
+      window.addEventListener("beforeprint", () => map.invalidateSize());
+    }
+
+    function bindCopyButtons() {
+      document.addEventListener("click", async (event) => {
+        const button = event.target.closest("[data-copy-template]");
+        if (!button) return;
+        const template = copyTemplates[button.dataset.copyTemplate];
+        const text = typeof template === "function" ? template() : "";
+        if (!text) return;
+        await copyText(text);
+        showToast("Copied itinerary summary");
+      });
+    }
+
+    async function copyText(text) {
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(text);
+        return;
+      }
+      const field = document.createElement("textarea");
+      field.value = text;
+      field.setAttribute("readonly", "");
+      field.style.position = "fixed";
+      field.style.left = "-999px";
+      document.body.appendChild(field);
+      field.select();
+      document.execCommand("copy");
+      field.remove();
+    }
+
+    function showToast(message) {
+      const toast = document.getElementById("copyToast");
+      toast.textContent = message;
+      toast.classList.add("visible");
+      setTimeout(() => toast.classList.remove("visible"), 1600);
+    }
+
+    function escapeHtml(value) {
+      return String(value).replace(/[&<>"']/g, (char) => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        "\"": "&quot;",
+        "'": "&#039;"
+      })[char]);
+    }
+
+    function escapeAttribute(value) {
+      return escapeHtml(value).replace(/`/g, "&#096;");
+    }
+
+    function createIcons() {
+      if (window.lucide) {
+        window.lucide.createIcons();
+      }
+    }
+
+    renderItinerary();
+    renderChecklist();
+    renderPeople();
+    bindPeopleForm();
+    bindCopyButtons();
+    initMap();
+    createIcons();
+  </script>
+</body>
+</html>
