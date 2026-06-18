@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Edinburgh Trip App</title>
+  <title>Edinburgh Festival Shortlist</title>
   <style>
     :root {
       --ink: #18211f;
@@ -16,7 +16,7 @@
       --clay: #a85842;
       --gold: #c89432;
       --plum: #6f3d56;
-      --shadow: 0 18px 45px rgba(24, 33, 31, 0.13);
+      --shadow: 0 16px 38px rgba(24, 33, 31, 0.12);
       --radius: 8px;
       font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     }
@@ -35,10 +35,14 @@
       margin: 0;
       color: var(--ink);
       background:
-        linear-gradient(180deg, rgba(228, 235, 231, 0.95), rgba(247, 244, 237, 0.98) 54%),
+        linear-gradient(180deg, rgba(228, 235, 231, 0.96), rgba(247, 244, 237, 0.98) 520px),
         var(--paper);
       line-height: 1.5;
       overflow-x: clip;
+    }
+
+    button {
+      font: inherit;
     }
 
     a {
@@ -48,18 +52,21 @@
     }
 
     .shell {
-      width: min(1160px, calc(100% - 32px));
+      width: min(1180px, calc(100% - 32px));
       margin: 0 auto;
     }
 
     .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
       border-bottom: 1px solid rgba(24, 33, 31, 0.12);
-      background: rgba(247, 244, 237, 0.9);
+      background: rgba(247, 244, 237, 0.92);
       backdrop-filter: blur(14px);
     }
 
     .topbar-inner {
-      min-height: 66px;
+      min-height: 68px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -80,21 +87,35 @@
     .brand span,
     .status span,
     .card p,
-    .next-list p,
+    .show-card p,
+    .slot-card p,
+    .criteria-list span,
     .footer {
       color: var(--muted);
     }
 
-    .status {
-      min-height: 36px;
+    .top-actions {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 8px;
+      min-width: 0;
+    }
+
+    .status,
+    .button {
+      min-height: 38px;
       display: inline-flex;
       align-items: center;
+      justify-content: center;
       gap: 9px;
       max-width: 100%;
-      padding: 7px 11px;
+      padding: 8px 12px;
       border: 1px solid rgba(57, 89, 77, 0.2);
       border-radius: 999px;
-      background: rgba(255, 253, 248, 0.82);
+      background: rgba(255, 253, 248, 0.86);
+      color: var(--ink);
+      text-decoration: none;
       white-space: nowrap;
       font-size: 0.92rem;
     }
@@ -108,15 +129,36 @@
       content: "";
     }
 
+    .button {
+      cursor: pointer;
+      border-color: rgba(47, 95, 115, 0.26);
+      background: var(--panel);
+      transition: transform 140ms ease, border-color 140ms ease, background 140ms ease;
+    }
+
+    .button:hover,
+    .button:focus-visible,
+    .tab-button:hover,
+    .tab-button:focus-visible {
+      transform: translateY(-1px);
+      border-color: rgba(111, 61, 86, 0.4);
+      background: #fbfaf6;
+      outline: none;
+    }
+
+    .button.primary {
+      border-color: var(--green);
+      background: var(--green);
+      color: #fff;
+    }
+
     main {
-      padding: 34px 0 42px;
+      padding: 28px 0 42px;
     }
 
     .hero {
-      position: relative;
-      min-height: min(650px, calc(100vh - 132px));
       display: grid;
-      grid-template-columns: minmax(0, 1.1fr) minmax(320px, 0.9fr);
+      grid-template-columns: minmax(0, 1.12fr) minmax(340px, 0.88fr);
       gap: 22px;
       align-items: stretch;
       min-width: 0;
@@ -132,15 +174,15 @@
       border: 1px solid rgba(24, 33, 31, 0.11);
       border-radius: var(--radius);
       background:
-        linear-gradient(130deg, rgba(24, 33, 31, 0.85), rgba(47, 95, 115, 0.64)),
-        linear-gradient(180deg, rgba(255, 255, 255, 0), rgba(24, 33, 31, 0.32)),
+        linear-gradient(130deg, rgba(24, 33, 31, 0.86), rgba(47, 95, 115, 0.66)),
+        linear-gradient(180deg, rgba(255, 255, 255, 0), rgba(24, 33, 31, 0.28)),
         #425c59;
       box-shadow: var(--shadow);
       color: #fffdf8;
     }
 
     .skyline {
-      min-height: 230px;
+      min-height: 210px;
       position: relative;
       overflow: hidden;
       border-bottom: 1px solid rgba(255, 255, 255, 0.14);
@@ -173,7 +215,7 @@
     }
 
     .intro-copy {
-      padding: clamp(24px, 4vw, 42px);
+      padding: 34px 42px 40px;
     }
 
     .eyebrow {
@@ -188,16 +230,16 @@
     h1 {
       max-width: 760px;
       margin: 0;
-      font-size: 4.8rem;
-      line-height: 0.96;
+      font-size: 4.55rem;
+      line-height: 0.98;
       letter-spacing: 0;
     }
 
     .intro-copy > p:not(.eyebrow) {
-      max-width: 620px;
+      max-width: 650px;
       margin: 20px 0 0;
       color: rgba(255, 253, 248, 0.82);
-      font-size: 1.12rem;
+      font-size: 1.1rem;
     }
 
     .panel {
@@ -208,7 +250,7 @@
     }
 
     .card,
-    .next-list,
+    .schedule,
     .links {
       min-width: 0;
       border: 1px solid rgba(24, 33, 31, 0.11);
@@ -230,138 +272,390 @@
 
     .card h2,
     .card h3,
-    .next-list h2,
-    .links h2 {
+    .section-heading h2,
+    .schedule h2,
+    .links h2,
+    .show-card h3,
+    .slot-card h3,
+    .criteria-dialog h2 {
       margin: 0;
       line-height: 1.15;
       letter-spacing: 0;
     }
 
-    .card h2 {
-      font-size: 1.72rem;
+    .card h2,
+    .schedule h2,
+    .links h2,
+    .criteria-dialog h2 {
+      font-size: 1.68rem;
     }
 
-    .card h3 {
-      font-size: 1.02rem;
+    .card h3,
+    .show-card h3,
+    .slot-card h3 {
+      font-size: 1.04rem;
     }
 
-    .card p {
+    .card p,
+    .show-card p,
+    .slot-card p {
       margin: 8px 0 0;
     }
 
-    .meta-grid {
+    .criteria-list {
       display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+      margin: 14px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .criteria-list li {
+      display: grid;
+      grid-template-columns: 36px minmax(0, 1fr);
+      gap: 10px;
+      align-items: start;
+      padding: 12px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fbfaf6;
+    }
+
+    .criteria-list b {
+      width: 36px;
+      height: 36px;
+      display: inline-grid;
+      place-items: center;
+      border-radius: 50%;
+      background: var(--green);
+      color: #fff;
+      font-size: 0.9rem;
+    }
+
+    .criteria-list strong {
+      display: block;
+      margin-bottom: 2px;
+    }
+
+    .window-strip {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
       gap: 10px;
     }
 
-    .meta {
-      min-width: 0;
-      min-height: 92px;
+    .window {
+      min-height: 94px;
       padding: 14px;
       border: 1px solid var(--line);
       border-radius: var(--radius);
       background: #fbfaf6;
     }
 
-    .meta b {
+    .window b {
       display: block;
-      margin-bottom: 4px;
-      color: var(--green);
-      font-size: 0.88rem;
+      color: var(--blue);
+      font-size: 1.02rem;
     }
 
-    .components {
+    .window span {
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .schedule {
       margin-top: 24px;
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 12px;
+      overflow: hidden;
     }
 
-    .component {
-      min-width: 0;
-      min-height: 156px;
+    .schedule-head {
       display: flex;
-      flex-direction: column;
+      align-items: flex-start;
       justify-content: space-between;
-      padding: 16px;
-      border: 1px solid rgba(24, 33, 31, 0.11);
-      border-radius: var(--radius);
-      background: var(--panel);
-      box-shadow: 0 10px 24px rgba(24, 33, 31, 0.08);
+      gap: 18px;
+      padding: 20px;
+      border-bottom: 1px solid var(--line);
     }
 
-    .component i {
-      width: 38px;
-      height: 38px;
-      display: inline-grid;
-      place-items: center;
-      border-radius: 50%;
-      color: #fff;
-      font-style: normal;
+    .filter-panel {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--line);
+      background: #fbfaf6;
+    }
+
+    .filter-group {
+      display: grid;
+      gap: 6px;
+      min-width: 0;
+    }
+
+    .filter-group label {
+      color: var(--muted);
+      font-size: 0.82rem;
       font-weight: 800;
     }
 
-    .component:nth-child(1) i {
-      background: var(--green);
+    .filter-group select {
+      width: 100%;
+      min-height: 40px;
+      border: 1px solid rgba(24, 33, 31, 0.18);
+      border-radius: var(--radius);
+      background: #fff;
+      color: var(--ink);
+      padding: 8px 10px;
+      font: inherit;
     }
 
-    .component:nth-child(2) i {
-      background: var(--blue);
-    }
-
-    .component:nth-child(3) i {
-      background: var(--clay);
-    }
-
-    .component:nth-child(4) i {
-      background: var(--plum);
-    }
-
-    .component strong {
-      display: block;
-      margin-top: 14px;
-    }
-
-    .component span {
+    .section-heading p {
+      max-width: 760px;
+      margin: 6px 0 0;
       color: var(--muted);
-      font-size: 0.94rem;
     }
 
-    .next-list,
-    .links {
-      margin-top: 12px;
+    .tabs {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 8px;
+      flex: 0 0 auto;
+    }
+
+    .tab-button {
+      min-height: 38px;
+      padding: 8px 12px;
+      border: 1px solid rgba(24, 33, 31, 0.16);
+      border-radius: 999px;
+      background: #fff;
+      color: var(--ink);
+      cursor: pointer;
+      white-space: nowrap;
+      transition: transform 140ms ease, border-color 140ms ease, background 140ms ease;
+    }
+
+    .tab-button[aria-selected="true"] {
+      border-color: var(--green);
+      background: var(--green);
+      color: #fff;
+    }
+
+    .tab-panel {
+      display: none;
       padding: 20px;
     }
 
-    .next-list ul,
+    .tab-panel.active {
+      display: block;
+    }
+
+    .slot-grid {
+      display: grid;
+      gap: 14px;
+    }
+
+    .slot-card {
+      min-width: 0;
+      display: grid;
+      grid-template-columns: 150px minmax(0, 1fr);
+      gap: 14px;
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fbfaf6;
+    }
+
+    .show-item.is-hidden {
+      display: none;
+    }
+
+    .slot-time {
+      display: grid;
+      align-content: start;
+      gap: 6px;
+      padding: 12px;
+      border-radius: var(--radius);
+      background: #eef4f0;
+      color: var(--green);
+      font-weight: 800;
+    }
+
+    .slot-time span {
+      color: var(--muted);
+      font-size: 0.86rem;
+      font-weight: 600;
+    }
+
+    .slot-body {
+      min-width: 0;
+    }
+
+    .show-summary {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .show-summary h3 {
+      min-width: 0;
+    }
+
+    .show-link {
+      flex: 0 0 auto;
+      font-size: 0.9rem;
+      font-weight: 800;
+    }
+
+    .show-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .show-card {
+      min-width: 0;
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fbfaf6;
+    }
+
+    .source-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 12px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .source-list a {
+      display: inline-flex;
+      align-items: center;
+      min-height: 30px;
+      padding: 5px 8px;
+      border: 1px solid rgba(47, 95, 115, 0.18);
+      border-radius: 999px;
+      background: #fff;
+      font-size: 0.84rem;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .badge-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin: 12px 0 0;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      min-height: 28px;
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: #edf3f0;
+      color: #2c493f;
+      font-size: 0.82rem;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .badge.gold {
+      background: #fff3ce;
+      color: #60450d;
+    }
+
+    .badge.plum {
+      background: #f7eaf1;
+      color: #633047;
+    }
+
+    .badge.clay {
+      background: #f8e9e4;
+      color: #7d3e30;
+    }
+
+    .empty-state {
+      display: none;
+      margin-top: 14px;
+      padding: 14px;
+      border: 1px dashed rgba(24, 33, 31, 0.22);
+      border-radius: var(--radius);
+      background: #fff;
+      color: var(--muted);
+    }
+
+    .empty-state.is-visible {
+      display: block;
+    }
+
+    .links {
+      margin-top: 14px;
+      padding: 20px;
+    }
+
     .links ul {
       margin: 14px 0 0;
       padding: 0;
       list-style: none;
     }
 
-    .next-list li,
     .links li {
       display: flex;
-      gap: 10px;
+      justify-content: space-between;
+      gap: 14px;
       padding: 11px 0;
       border-top: 1px solid var(--line);
     }
 
-    .next-list li::before {
-      width: 9px;
-      height: 9px;
-      margin-top: 8px;
-      border-radius: 50%;
-      background: var(--gold);
-      flex: 0 0 auto;
-      content: "";
+    .links span {
+      color: var(--muted);
     }
 
-    .links li {
+    .criteria-dialog {
+      width: min(720px, calc(100% - 28px));
+      padding: 0;
+      border: 1px solid rgba(24, 33, 31, 0.18);
+      border-radius: var(--radius);
+      background: var(--panel);
+      color: var(--ink);
+      box-shadow: 0 24px 80px rgba(24, 33, 31, 0.28);
+    }
+
+    .criteria-dialog::backdrop {
+      background: rgba(24, 33, 31, 0.42);
+      backdrop-filter: blur(2px);
+    }
+
+    .dialog-body {
+      padding: 22px;
+    }
+
+    .dialog-head {
+      display: flex;
       justify-content: space-between;
-      align-items: center;
+      gap: 14px;
+      align-items: flex-start;
+      padding: 20px 22px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .dialog-head p {
+      margin: 8px 0 0;
+      color: var(--muted);
+    }
+
+    .close-button {
+      min-width: 38px;
+      min-height: 38px;
+      border: 1px solid var(--line);
+      border-radius: 50%;
+      background: #fff;
+      cursor: pointer;
+      font-weight: 800;
     }
 
     .footer {
@@ -369,40 +663,53 @@
       font-size: 0.92rem;
     }
 
-    @media (max-width: 920px) {
+    @media (max-width: 960px) {
       .hero,
-      .components {
+      .show-grid,
+      .window-strip,
+      .filter-panel {
         grid-template-columns: 1fr;
-      }
-
-      .intro {
-        min-height: 560px;
       }
 
       .panel {
         grid-template-columns: repeat(2, minmax(0, 1fr));
       }
 
-      .panel .card.accent {
+      .panel .card.accent,
+      .panel .card.criteria-card {
         grid-column: 1 / -1;
+      }
+
+      .schedule-head {
+        flex-direction: column;
+      }
+
+      .tabs {
+        justify-content: flex-start;
       }
     }
 
     @media (max-width: 640px) {
       .shell {
-        width: min(100% - 24px, 1160px);
+        width: min(100% - 24px, 1180px);
       }
 
       .topbar-inner {
-        min-height: 76px;
+        min-height: 96px;
         align-items: flex-start;
         flex-direction: column;
         justify-content: center;
-        gap: 8px;
+        gap: 10px;
       }
 
-      .status {
+      .top-actions {
+        width: 100%;
+        justify-content: flex-start;
         flex-wrap: wrap;
+      }
+
+      .status,
+      .button {
         white-space: normal;
       }
 
@@ -414,13 +721,12 @@
         min-height: 560px;
       }
 
-      .skyline {
-        min-height: 180px;
+      .intro-copy {
+        padding: 28px 24px 30px;
       }
 
-      .panel,
-      .meta-grid {
-        grid-template-columns: 1fr;
+      .skyline {
+        min-height: 180px;
       }
 
       h1 {
@@ -429,6 +735,16 @@
 
       .intro-copy > p:not(.eyebrow) {
         font-size: 1rem;
+      }
+
+      .panel,
+      .slot-card {
+        grid-template-columns: 1fr;
+      }
+
+      .show-summary {
+        flex-direction: column;
+        gap: 4px;
       }
 
       .links li {
@@ -442,13 +758,16 @@
 <body>
   <header class="topbar">
     <div class="shell topbar-inner">
-      <div class="brand" aria-label="Edinburgh trip app">
-        <strong>Edinburgh Trip App</strong>
-        <span>Festival planning base</span>
+      <div class="brand" aria-label="Edinburgh festival shortlist">
+        <strong>Edinburgh Festival Shortlist</strong>
+        <span>Five-star reviewed show planning</span>
       </div>
-      <div class="status" aria-label="GitHub Pages status">
-        <strong>Live on GitHub Pages</strong>
-        <span>Work coming</span>
+      <div class="top-actions">
+        <button class="button primary" type="button" id="criteriaButton">Criteria</button>
+        <div class="status" aria-label="GitHub Pages status">
+          <strong>Live</strong>
+          <span>GitHub Pages</span>
+        </div>
       </div>
     </div>
   </header>
@@ -458,91 +777,320 @@
       <div class="intro">
         <div class="skyline" aria-hidden="true"></div>
         <div class="intro-copy">
-          <p class="eyebrow">Edinburgh trip workspace</p>
-          <h1 id="page-title">The Edinburgh app is live.</h1>
-          <p>This is the public base framework for the trip app. It is intentionally simple for now, so the GitHub Pages link has a clear, working home while the real itinerary, map, and shared planning pieces are added.</p>
+          <p class="eyebrow">Festival shortlist board</p>
+          <h1 id="page-title">Find the strongest daytime shows.</h1>
+          <p>Use this board to coordinate Edinburgh Festival options in two-hour windows from 10:00 to 18:00, prioritising shows with five-star reviews, national coverage, known directors, and evidence of a strong previous festival run.</p>
         </div>
       </div>
 
-      <aside class="panel" aria-label="Current setup">
+      <aside class="panel" aria-label="Selection summary">
         <article class="card accent">
-          <h2>Ready for the next build</h2>
-          <p>Static hosting is in place. The page can grow into the same kind of shared trip planner as the boat holiday app without needing a backend.</p>
+          <h2>Priority filter</h2>
+          <p>Known director or company, preferably five-star reviewed, reviewed by a credible outlet, and credible enough to plan a daytime slot around.</p>
+        </article>
+        <article class="card criteria-card">
+          <h3>Working assumption</h3>
+          <p>Some shows may return after a previous Edinburgh run because they reviewed so well. Treat that as a useful signal, then verify dates, venue, and current reviews before booking.</p>
         </article>
         <article class="card">
-          <h3>Public link</h3>
-          <p><a href="https://drmedrme.github.io/app_edinburgh/">https://drmedrme.github.io/app_edinburgh/</a></p>
+          <h3>Core hours</h3>
+          <p>Build the day from 10:00 to 18:00, leaving evenings open for meals, rest, or bigger ticketed events.</p>
         </article>
         <article class="card">
-          <h3>Hosting source</h3>
-          <p>GitHub Pages serves this from the <code>main</code> branch at the repository root.</p>
+          <h3>Fallback tab</h3>
+          <p>Use Other Shows for strong reviews that miss one of the strict criteria, sit outside the daytime window, or need more checking.</p>
         </article>
-        <div class="meta-grid">
-          <div class="meta">
-            <b>Status</b>
-            Built and public
-          </div>
-          <div class="meta">
-            <b>Privacy</b>
-            Keep bookings and private details out of the public repo
-          </div>
-        </div>
       </aside>
     </section>
 
-    <section class="components" aria-label="Planned component areas">
-      <article class="component">
-        <div>
-          <i aria-hidden="true">1</i>
-          <strong>Itinerary</strong>
-        </div>
-        <span>Days, timings, shows, meals, and travel notes.</span>
-      </article>
-      <article class="component">
-        <div>
-          <i aria-hidden="true">2</i>
-          <strong>Map</strong>
-        </div>
-        <span>Venues, meet-up points, and walking routes.</span>
-      </article>
-      <article class="component">
-        <div>
-          <i aria-hidden="true">3</i>
-          <strong>Stays</strong>
-        </div>
-        <span>Accommodation area, arrival plan, and practical reminders.</span>
-      </article>
-      <article class="component">
-        <div>
-          <i aria-hidden="true">4</i>
-          <strong>Group Notes</strong>
-        </div>
-        <span>Shared prompts, decisions, and things still to book.</span>
-      </article>
+    <section class="card" aria-labelledby="windows-title">
+      <div class="section-heading">
+        <h2 id="windows-title">Two-hour planning windows</h2>
+        <p>Each window can hold one primary candidate plus a nearby backup if the venue timing is tight or tickets disappear.</p>
+      </div>
+      <div class="window-strip" aria-label="Daytime festival windows">
+        <div class="window"><b>10:00-12:00</b><span>Morning review-backed option</span></div>
+        <div class="window"><b>12:00-14:00</b><span>Late morning or lunch-adjacent slot</span></div>
+        <div class="window"><b>14:00-16:00</b><span>Afternoon priority candidate</span></div>
+        <div class="window"><b>16:00-18:00</b><span>Early evening bridge slot</span></div>
+      </div>
     </section>
 
-    <section class="next-list" aria-labelledby="next-title">
-      <h2 id="next-title">What will land here next</h2>
-      <p>The first useful version should focus on the pieces that help on the trip itself.</p>
-      <ul>
-        <li>Replace this placeholder with real festival dates and booked events.</li>
-        <li>Add a compact mobile-first day view for checking plans while out in Edinburgh.</li>
-        <li>Add public venue links and map points while keeping private booking details off the page.</li>
-      </ul>
+    <section class="schedule" aria-labelledby="schedule-title">
+      <div class="schedule-head">
+        <div class="section-heading">
+          <h2 id="schedule-title">Show shortlist</h2>
+          <p>Seeded with real 2026 listings and review signals. Filter by rating or Edinburgh history, then update the cards as better review evidence appears.</p>
+        </div>
+        <div class="tabs" role="tablist" aria-label="Show categories">
+          <button class="tab-button" type="button" role="tab" id="priority-tab" aria-selected="true" aria-controls="priority-panel">Priority Matches</button>
+          <button class="tab-button" type="button" role="tab" id="other-tab" aria-selected="false" aria-controls="other-panel">Other Shows</button>
+        </div>
+      </div>
+
+      <div class="filter-panel" aria-label="Show filters">
+        <div class="filter-group">
+          <label for="ratingFilter">Star rating</label>
+          <select id="ratingFilter">
+            <option value="all">All ratings</option>
+            <option value="5">Five-star signal</option>
+            <option value="4">Four-star signal</option>
+            <option value="unrated">No current star signal</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label for="historyFilter">Edinburgh history</label>
+          <select id="historyFilter">
+            <option value="all">All histories</option>
+            <option value="returning">Prior Edinburgh / returning</option>
+            <option value="first">First time or new show</option>
+            <option value="unknown">History to confirm</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label for="windowFilter">Time window</label>
+          <select id="windowFilter">
+            <option value="all">All times</option>
+            <option value="10-12">10:00-12:00</option>
+            <option value="12-14">12:00-14:00</option>
+            <option value="14-16">14:00-16:00</option>
+            <option value="16-18">16:00-18:00</option>
+            <option value="outside">Outside daytime plan</option>
+            <option value="unknown">Time to confirm</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="tab-panel active" id="priority-panel" role="tabpanel" aria-labelledby="priority-tab">
+        <div class="slot-grid">
+          <article class="slot-card show-item" data-rating="5" data-history="returning" data-window="10-12">
+            <div class="slot-time">11:00<span>10:00-12:00 window</span></div>
+            <div class="slot-body">
+              <div class="show-summary">
+                <h3>Boiler Room Six: A Titanic Story</h3>
+                <a class="show-link" href="https://www.edfringe.com/tickets/whats-on/boiler-room-six-a-titanic-story" target="_blank" rel="noreferrer">Show page</a>
+              </div>
+              <p>Tom Foreman Productions' Titanic drama is listed as a 2024 Fringe sell-out, with an official listing quoting a five-star British Theatre Guide review. West End Best Friend also flags it as returning after a five-star review last year.</p>
+              <div class="badge-row">
+                <span class="badge gold">5 star signal</span>
+                <span class="badge plum">Returning production</span>
+                <span class="badge">Known company</span>
+              </div>
+              <ul class="source-list">
+                <li><a href="https://www.edfringe.com/tickets/whats-on/boiler-room-six-a-titanic-story" target="_blank" rel="noreferrer">Fringe listing</a></li>
+                <li><a href="https://www.westendbestfriend.co.uk/news/edinburgh-festival-fringe-top-picks-2026-plays" target="_blank" rel="noreferrer">WE Best Friend pick</a></li>
+              </ul>
+            </div>
+          </article>
+          <article class="slot-card show-item" data-rating="5" data-history="returning" data-window="12-14">
+            <div class="slot-time">13:35<span>12:00-14:00 window</span></div>
+            <div class="slot-body">
+              <div class="show-summary">
+                <h3>ALONE</h3>
+                <a class="show-link" href="https://www.edfringe.com/tickets/whats-on/alone" target="_blank" rel="noreferrer">Show page</a>
+              </div>
+              <p>A sci-fi thriller from Alchemy Theatre and alonetheplay. The official listing quotes multiple five-star reviews and awards, and West End Best Friend describes it as a returning 2025 five-star pick.</p>
+              <div class="badge-row">
+                <span class="badge gold">5 star signal</span>
+                <span class="badge plum">Returning production</span>
+                <span class="badge">Award winner</span>
+              </div>
+              <ul class="source-list">
+                <li><a href="https://www.edfringe.com/tickets/whats-on/alone" target="_blank" rel="noreferrer">Fringe listing</a></li>
+                <li><a href="https://www.westendbestfriend.co.uk/news/edinburgh-festival-fringe-top-picks-2026-plays" target="_blank" rel="noreferrer">WE Best Friend pick</a></li>
+              </ul>
+            </div>
+          </article>
+          <article class="slot-card show-item" data-rating="unrated" data-history="first" data-window="14-16">
+            <div class="slot-time">15:00<span>14:00-16:00 window</span></div>
+            <div class="slot-body">
+              <div class="show-summary">
+                <h3>Stay A Little Longer</h3>
+                <a class="show-link" href="https://www.edfringe.com/tickets/whats-on/stay-a-little-longer" target="_blank" rel="noreferrer">Show page</a>
+              </div>
+              <p>A new Tom Foreman Productions play. It is not a five-star match yet, but it is a useful example of a known-creative-team candidate that may move up if reviews land well.</p>
+              <div class="badge-row">
+                <span class="badge">Known company</span>
+                <span class="badge clay">Needs reviews</span>
+                <span class="badge">New show</span>
+              </div>
+              <ul class="source-list">
+                <li><a href="https://www.edfringe.com/tickets/whats-on/stay-a-little-longer" target="_blank" rel="noreferrer">Fringe listing</a></li>
+                <li><a href="https://www.westendbestfriend.co.uk/news/edinburgh-festival-fringe-top-picks-2026-plays" target="_blank" rel="noreferrer">Context pick</a></li>
+              </ul>
+            </div>
+          </article>
+          <article class="slot-card show-item" data-rating="5" data-history="returning" data-window="16-18">
+            <div class="slot-time">17:35<span>16:00-18:00 window</span></div>
+            <div class="slot-body">
+              <div class="show-summary">
+                <h3>Police Cops: The Original</h3>
+                <a class="show-link" href="https://www.edfringe.com/tickets/whats-on/police-cops-the-original" target="_blank" rel="noreferrer">Show page</a>
+              </div>
+              <p>The Police Cops company brings back its original comedy blockbuster for 2026. The listing says it has 20+ five-star reviews and quotes five-star notices from WhatsOnStage, EdFestMag, The Stage, and Theatre Weekly.</p>
+              <div class="badge-row">
+                <span class="badge gold">20+ five-star reviews</span>
+                <span class="badge plum">Returning production</span>
+                <span class="badge">Known company</span>
+              </div>
+              <ul class="source-list">
+                <li><a href="https://www.edfringe.com/tickets/whats-on/police-cops-the-original" target="_blank" rel="noreferrer">Fringe listing</a></li>
+                <li><a href="https://www.policecops.co.uk/" target="_blank" rel="noreferrer">Company site</a></li>
+              </ul>
+            </div>
+          </article>
+        </div>
+        <div class="empty-state" data-empty-for="priority-panel">No priority matches for those filters yet.</div>
+      </div>
+
+      <div class="tab-panel" id="other-panel" role="tabpanel" aria-labelledby="other-tab">
+        <div class="show-grid">
+          <article class="show-card show-item" data-rating="4" data-history="returning" data-window="outside">
+            <div class="show-summary">
+              <h3>Tell Me</h3>
+              <a class="show-link" href="https://www.edfringe.com/tickets/whats-on/tell-me" target="_blank" rel="noreferrer">Show page</a>
+            </div>
+            <p>Sadiq Ali Company returns with a new dance/circus work. The listing links the company to five-star award-winning The Chosen Haram and quotes a four-star Guardian notice, but the listed 19:00 time puts it outside the daytime plan.</p>
+            <div class="badge-row">
+              <span class="badge">4 star national signal</span>
+              <span class="badge plum">Returning company</span>
+              <span class="badge clay">19:00</span>
+            </div>
+            <ul class="source-list">
+              <li><a href="https://www.edfringe.com/tickets/whats-on/tell-me" target="_blank" rel="noreferrer">Fringe listing</a></li>
+              <li><a href="https://www.edfringe.com/about-us/news-and-blog/made-in-scotland-2026-showcase-launches-for-fringe-2026/" target="_blank" rel="noreferrer">Made in Scotland</a></li>
+            </ul>
+          </article>
+          <article class="show-card show-item" data-rating="5" data-history="returning" data-window="unknown">
+            <div class="show-summary">
+              <h3>1 Hour of Insane Magic</h3>
+              <a class="show-link" href="https://www.edfringe.com/tickets/whats-on/1-hour-of-insane-magic" target="_blank" rel="noreferrer">Show page</a>
+            </div>
+            <p>Insane Magic returns for a fourth year. The listing says the trio have international acclaim and five-star reviews, but the public summary shows various times, so it needs a date/time check before slotting into the day.</p>
+            <div class="badge-row">
+              <span class="badge gold">5 star signal</span>
+              <span class="badge plum">Prior Edinburgh</span>
+              <span class="badge clay">Time to check</span>
+            </div>
+            <ul class="source-list">
+              <li><a href="https://www.edfringe.com/tickets/whats-on/1-hour-of-insane-magic" target="_blank" rel="noreferrer">Fringe listing</a></li>
+              <li><a href="https://www.insanemagic.co.uk/" target="_blank" rel="noreferrer">Company site</a></li>
+            </ul>
+          </article>
+          <article class="show-card show-item" data-rating="unrated" data-history="first" data-window="unknown">
+            <div class="show-summary">
+              <h3>Roleplay</h3>
+              <a class="show-link" href="https://www.theguardian.com/stage/2026/jun/04/edinburgh-festival-2026-must-see-theatre" target="_blank" rel="noreferrer">Guardian pick</a>
+            </div>
+            <p>Guardian and Time Out both flag ROLEPLAY as a 2026 show to watch, with producer Francesca Moody noted as a strong Fringe signal. It needs star reviews and exact timing before it can become a priority match.</p>
+            <div class="badge-row">
+              <span class="badge">National preview</span>
+              <span class="badge">Producer signal</span>
+              <span class="badge clay">Needs reviews</span>
+            </div>
+            <ul class="source-list">
+              <li><a href="https://www.theguardian.com/stage/2026/jun/04/edinburgh-festival-2026-must-see-theatre" target="_blank" rel="noreferrer">Guardian</a></li>
+              <li><a href="https://www.timeout.com/edinburgh/theatre/best-edinburgh-festival-fringe-theatre-shows" target="_blank" rel="noreferrer">Time Out</a></li>
+            </ul>
+          </article>
+        </div>
+        <div class="empty-state" data-empty-for="other-panel">No other-show matches for those filters yet.</div>
+      </div>
     </section>
 
     <section class="links" aria-labelledby="links-title">
-      <h2 id="links-title">Useful starting points</h2>
+      <h2 id="links-title">Research links</h2>
       <ul>
-        <li><a href="https://www.edfringe.com/" target="_blank" rel="noreferrer">Edinburgh Festival Fringe</a><span>Shows and venue information</span></li>
-        <li><a href="https://www.eif.co.uk/" target="_blank" rel="noreferrer">Edinburgh International Festival</a><span>Programme and tickets</span></li>
-        <li><a href="https://www.edbookfest.co.uk/" target="_blank" rel="noreferrer">Edinburgh International Book Festival</a><span>Book events and visitor details</span></li>
+        <li><a href="https://www.edfringe.com/" target="_blank" rel="noreferrer">Edinburgh Festival Fringe</a><span>Listings, venues, and tickets</span></li>
+        <li><a href="https://www.eif.co.uk/" target="_blank" rel="noreferrer">Edinburgh International Festival</a><span>Programme and major events</span></li>
+        <li><a href="https://www.theguardian.com/stage/edinburghfestival" target="_blank" rel="noreferrer">The Guardian Edinburgh Festival coverage</a><span>National reviews and recommendations</span></li>
+        <li><a href="https://www.timeout.com/edinburgh" target="_blank" rel="noreferrer">Time Out Edinburgh</a><span>Festival picks and city context</span></li>
       </ul>
     </section>
 
     <footer class="footer">
-      Edinburgh Trip App placeholder. Public page live; trip planning content coming next.
+      Public shortlist framework. Keep private booking details and attendee information out of the repository.
     </footer>
   </main>
+
+  <dialog class="criteria-dialog" id="criteriaDialog">
+    <div class="dialog-head">
+      <div>
+        <h2>Selection criteria</h2>
+        <p>Use these signals to decide what belongs in the main shortlist.</p>
+      </div>
+      <button class="close-button" type="button" id="closeCriteria" aria-label="Close criteria">x</button>
+    </div>
+    <div class="dialog-body">
+      <ul class="criteria-list">
+        <li><b>1</b><span><strong>Known director or company</strong>Prioritise shows from a recognised director, company, writer, performer, or creative team.</span></li>
+        <li><b>2</b><span><strong>Five-star reviews</strong>Prefer shows with five-star reviews from credible publications or established reviewers.</span></li>
+        <li><b>3</b><span><strong>Nationally reviewed</strong>Look for coverage from national newspapers, major arts publications, or widely read review outlets.</span></li>
+        <li><b>4</b><span><strong>Returning or proven festival signal</strong>Flag shows that appear to have returned after a strong previous Edinburgh run or similar festival success.</span></li>
+        <li><b>5</b><span><strong>Fits the daytime plan</strong>Main candidates should run between 10:00 and 18:00 and fit cleanly into a two-hour planning window.</span></li>
+      </ul>
+    </div>
+  </dialog>
+
+  <script>
+    const criteriaButton = document.getElementById("criteriaButton");
+    const criteriaDialog = document.getElementById("criteriaDialog");
+    const closeCriteria = document.getElementById("closeCriteria");
+    const tabButtons = document.querySelectorAll("[role='tab']");
+    const tabPanels = document.querySelectorAll("[role='tabpanel']");
+    const filterSelects = document.querySelectorAll(".filter-panel select");
+    const showItems = document.querySelectorAll(".show-item");
+    const emptyStates = document.querySelectorAll(".empty-state");
+
+    criteriaButton.addEventListener("click", () => {
+      if (typeof criteriaDialog.showModal === "function") {
+        criteriaDialog.showModal();
+      } else {
+        criteriaDialog.setAttribute("open", "");
+      }
+    });
+
+    closeCriteria.addEventListener("click", () => {
+      criteriaDialog.close();
+    });
+
+    criteriaDialog.addEventListener("click", (event) => {
+      if (event.target === criteriaDialog) {
+        criteriaDialog.close();
+      }
+    });
+
+    tabButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        tabButtons.forEach((tab) => tab.setAttribute("aria-selected", "false"));
+        tabPanels.forEach((panel) => panel.classList.remove("active"));
+        button.setAttribute("aria-selected", "true");
+        document.getElementById(button.getAttribute("aria-controls")).classList.add("active");
+      });
+    });
+
+    filterSelects.forEach((select) => {
+      select.addEventListener("change", applyFilters);
+    });
+
+    function applyFilters() {
+      const rating = document.getElementById("ratingFilter").value;
+      const history = document.getElementById("historyFilter").value;
+      const windowValue = document.getElementById("windowFilter").value;
+
+      showItems.forEach((item) => {
+        const ratingMatch = rating === "all" || item.dataset.rating === rating;
+        const historyMatch = history === "all" || item.dataset.history === history;
+        const windowMatch = windowValue === "all" || item.dataset.window === windowValue;
+        item.classList.toggle("is-hidden", !(ratingMatch && historyMatch && windowMatch));
+      });
+
+      emptyStates.forEach((emptyState) => {
+        const panel = document.getElementById(emptyState.dataset.emptyFor);
+        const visibleCount = panel.querySelectorAll(".show-item:not(.is-hidden)").length;
+        emptyState.classList.toggle("is-visible", visibleCount === 0);
+      });
+    }
+  </script>
 </body>
 </html>
