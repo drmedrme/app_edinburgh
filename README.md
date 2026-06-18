@@ -42,17 +42,32 @@ Assume one hour for daytime performances and either 30 minutes or a specific wal
 The main shortlist should prioritise shows that meet as many of these signals as possible:
 
 - Slot availability.
-- Multiple reputable five-star reviews, ideally from 2025 or 2024.
+- Multiple reputable four- or five-star reviews, ideally from 2025 or 2024.
+- FringeReview `Outstanding` or `Unmissable` notices from 2025 or 2024.
 - Known director, company, writer, performer, producer, or creative team.
 - Reputable producer signal, for example Francesca Moody.
 - Insider or preview picks from credible sources such as Time Out, Guardian, Times, Scotsman, or similar.
-- Bias toward theatre, comedic theatre, and music over stand-up and circus.
+- Bias toward theatre, comedic theatre, music, inventive European physical theatre, political comedy, Scottish musicals, literary improv, and cabaret with strong production value.
 - Priority consideration for Fringe, Traverse Theatre, and EIF.
 - Evidence that the show is returning after a strong previous Edinburgh run or similar festival success.
 
 Shows that are promising but miss one of those requirements should go under `Other Shows`. That includes strong reviews without a known director, excellent options that conflict with dinner, and shows that need more review evidence before becoming a priority match.
 
 Allow two to four weird wildcard shows, but label them as wildcards so they remain deliberate choices.
+
+## Contributor Taste Profile
+
+Use these prior favourites as a tie-breaker when candidates are otherwise close:
+
+- `The Ice Hole` / `Fishbowl` style visual and physical theatre.
+- `Funeral` by Ontroerend Goed and similar Belgian / European experimental theatre.
+- `Dimanche` style word-light, design-led physical theatre.
+- `Ahir Shah` and politically sharp comedy.
+- `England & Son` / Mark Thomas-style political theatre.
+- `Sunshine on Leith` and Scottish musical theatre.
+- `Trainspotting` adaptations.
+- Jane Austen spoofs, improv, and literary comedy.
+- Reuben Kaye / Kaye Hole-style late cabaret.
 
 ## Seeded Show Examples
 
@@ -63,6 +78,12 @@ The current page includes real 2026 examples to show how the data should be capt
 - `Stay A Little Longer` - 15:00, known creative-team signal, but needs current reviews.
 - `Police Cops: The Original` - 17:35, returning production, 20+ five-star review claim on the Fringe listing.
 - `ROLEPLAY` - 17:50, Francesca Moody producer signal and national preview picks, but needs reviews.
+- `Ahir Shah: Golden` - 19:30, direct contributor taste match, five-star prior-review signal, dinner conflict.
+- `Sunshine on Leith` - 19:10, direct contributor taste match, five-star sell-out Scottish musical.
+- `Trainspotting Live` - various evening times, direct contributor taste match, returning immersive production.
+- `Austentatious` - 12:50, Jane Austen improv/spoof match with five-star and four-star signals.
+- `Hard to Swallow: Reuben Kaye` - 20:00, closest first-week Reuben Kaye / Kaye Hole match.
+- `Mark Thomas: 40 in Stand-Up Years` - 18:00, closest 2026 match for the `England & Son` preference.
 - `The Jolly Fisherman` - 12:45, Guardian preview pick, but needs reviews.
 - `Medicine` - EIF / Traverse option at 20:00 or 14:00 depending on date.
 - `Supposing:` - Traverse world premiere by Zinnie Harris, strong known-director signal, availability risk.
@@ -88,20 +109,23 @@ The app currently supports five simple filters:
 Dinner is slot 5. The target is restaurant dinners Saturday to Thursday for eight people:
 
 - Mix well-rated about GBP100/head and about GBP50/head options.
-- Keep restaurants within a 20-minute walk of Edinburgh Playhouse / Greenside.
+- Prefer independent Edinburgh restaurants with a sense of place.
+- Avoid hotel restaurants, London-familiar chains, and generic national chains.
+- Keep restaurants reasonably close to Edinburgh Playhouse / Greenside unless the meal is explicitly worth a longer walk.
 - Allow one wildcard restaurant with a longer walk.
 - Do not include Leith restaurants unless the group explicitly overrides the brief.
 
 The page currently includes real restaurant suggestions used in the day plan:
 
-- `LaSal` - opposite Edinburgh Playhouse, good arrival-night candidate.
-- `Mamma Roma` - opposite Edinburgh Playhouse, practical Italian group option.
-- `1802 Lounge & Grill` - next to Edinburgh Playhouse, mid-spend Scottish/international grill.
+- `Timberyard` - named GBP100/head guidance pick and independent Edinburgh destination restaurant.
+- `Lucky Yu` - named GBP50/head guidance pick on Broughton Street.
+- `Noto` - independent Edinburgh small-plates restaurant from Stuart Ralston.
+- `L'Escargot Bleu` - independent Broughton Street French restaurant and wine bar.
+- `The Little Chartroom` - independent Edinburgh restaurant with lunch, pre-theatre, and dinner options.
 - `The Olive Branch` - Broughton Street bistro; tables of seven or more require direct contact.
-- `Hawksmoor Edinburgh` - higher-spend steak/seafood candidate for the GBP100/head mix.
-- `Dishoom Edinburgh` - St Andrew Square; after 18:00, published policy accepts bookings for groups of six or more.
-- `The Dome` - central wildcard/set-piece dinner with private dining capacity.
-- `Bonnie & Wild` - St James Quarter no-booking food hall fallback.
+- `LaSal` - independent Spanish restaurant opposite Edinburgh Playhouse, good arrival-night candidate.
+- `The Dome` - central Edinburgh set-piece wildcard with private dining capacity.
+- `Edinburgh Street Food` - independent-vendor, no-chain casual fallback rather than a formal dinner.
 
 Verify availability, distance, and suitability for a table of eight before booking.
 
