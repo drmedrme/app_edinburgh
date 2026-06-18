@@ -1,8 +1,8 @@
-# Edinburgh Festival Planner
+# Edinburgh Trip App
 
-Static itinerary board for an Edinburgh Festival trip.
+Static GitHub Pages shell for the Edinburgh trip app.
 
-The app is intentionally a plain `index.html` so it can be published directly with GitHub Pages and shared with the group without a backend. Editable status fields, notes, checklist state, and attendee names are stored in each browser's local storage; they are not committed or synchronized.
+The app is intentionally a plain `index.html` so it can be published directly with GitHub Pages and shared without a backend. The current page is a live placeholder that confirms the public link works while the itinerary, map, accommodation notes, and trip-planning components are built out.
 
 ## Local Serving
 
@@ -16,22 +16,23 @@ The script follows App Hub's port convention. It first uses the `edinburgh` entr
 
 ## Public Hosting
 
-This planner is designed for GitHub Pages:
+GitHub Pages is configured for this repository:
 
 ```text
 https://drmedrme.github.io/app_edinburgh/
 ```
 
-After the GitHub repo exists, enable Pages from the repository settings using:
+Current Pages setup:
 
 ```text
 Source: Deploy from a branch
 Branch: main
 Folder: /
+Status: built
 ```
 
 ## Public Data Boundary
 
-Keep the checked-in planner free of personal information. The public repo can safely contain placeholder itinerary data, venue links, map coordinates, packing checklists, and public travel notes.
+Keep the checked-in app free of personal information. The public repo can safely contain placeholder itinerary data, venue links, map coordinates, packing checklists, and public travel notes.
 
-Do not commit attendee names, phone numbers, private accommodation addresses, booking references, or ticket QR codes. Use the in-browser attendee and notes fields for local working data only.
+Do not commit attendee names, phone numbers, private accommodation addresses, booking references, or ticket QR codes.
