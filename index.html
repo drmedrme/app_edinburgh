@@ -152,6 +152,41 @@
       color: #fff;
     }
 
+    .day-nav-wrap {
+      border-bottom: 1px solid rgba(24, 33, 31, 0.1);
+      background: rgba(255, 253, 248, 0.9);
+    }
+
+    .day-nav {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding: 10px 0;
+      scrollbar-width: thin;
+    }
+
+    .day-nav a {
+      flex: 0 0 auto;
+      min-height: 36px;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 7px 10px;
+      border: 1px solid rgba(57, 89, 77, 0.18);
+      border-radius: 999px;
+      background: #fff;
+      color: var(--ink);
+      font-size: 0.9rem;
+      font-weight: 800;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .day-nav span {
+      color: var(--muted);
+      font-weight: 700;
+    }
+
     main {
       padding: 28px 0 42px;
     }
@@ -250,6 +285,7 @@
     }
 
     .card,
+    .day-plans,
     .schedule,
     .dinner-plan,
     .links {
@@ -274,6 +310,8 @@
     .card h2,
     .card h3,
     .section-heading h2,
+    .day-plans h2,
+    .day-card h3,
     .schedule h2,
     .dinner-plan h2,
     .links h2,
@@ -286,6 +324,7 @@
     }
 
     .card h2,
+    .day-plans h2,
     .schedule h2,
     .dinner-plan h2,
     .links h2,
@@ -294,6 +333,7 @@
     }
 
     .card h3,
+    .day-card h3,
     .show-card h3,
     .slot-card h3 {
       font-size: 1.04rem;
@@ -395,6 +435,127 @@
     }
 
     .window span {
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .day-plans {
+      margin-top: 24px;
+      padding: 20px;
+    }
+
+    .day-plan-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 18px;
+      padding-bottom: 18px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .day-plan-note {
+      flex: 0 0 auto;
+      max-width: 260px;
+      padding: 10px 12px;
+      border: 1px solid rgba(168, 88, 66, 0.22);
+      border-radius: var(--radius);
+      background: #fff6f1;
+      color: var(--muted);
+      font-size: 0.88rem;
+      font-weight: 700;
+    }
+
+    .day-grid {
+      display: grid;
+      gap: 14px;
+      margin-top: 18px;
+    }
+
+    .day-card {
+      min-width: 0;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fbfaf6;
+      scroll-margin-top: 92px;
+    }
+
+    .day-card-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 16px;
+      border-bottom: 1px solid var(--line);
+      background: #fff;
+    }
+
+    .day-card-header p {
+      margin: 6px 0 0;
+      color: var(--muted);
+    }
+
+    .day-pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 7px;
+      flex: 0 0 auto;
+    }
+
+    .day-slots {
+      display: grid;
+      gap: 0;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .day-slot {
+      display: grid;
+      grid-template-columns: 132px minmax(0, 1fr);
+      gap: 14px;
+      padding: 14px 16px;
+      border-top: 1px solid rgba(217, 209, 192, 0.72);
+    }
+
+    .day-slot:first-child {
+      border-top: 0;
+    }
+
+    .day-slot time,
+    .day-slot .slot-label {
+      min-width: 0;
+      color: var(--green);
+      font-weight: 900;
+    }
+
+    .day-slot .slot-label span {
+      display: block;
+      color: var(--muted);
+      font-size: 0.84rem;
+      font-weight: 700;
+    }
+
+    .day-slot strong {
+      display: block;
+      line-height: 1.2;
+    }
+
+    .day-slot p {
+      margin: 5px 0 0;
+      color: var(--muted);
+    }
+
+    .day-slot.dinner {
+      background: #fff6f1;
+    }
+
+    .day-slot.late {
+      background: #f6f7fb;
+    }
+
+    .source-note {
+      margin: 14px 0 0;
       color: var(--muted);
       font-size: 0.92rem;
     }
@@ -764,6 +925,8 @@
       .hero,
       .show-grid,
       .restaurant-grid,
+      .day-plan-head,
+      .day-card-header,
       .agenda-list,
       .plan-grid,
       .window-strip,
@@ -847,10 +1010,29 @@
         gap: 4px;
       }
 
+      .day-plan-head,
+      .day-card-header {
+        flex-direction: column;
+      }
+
+      .day-plan-note {
+        width: 100%;
+        max-width: none;
+      }
+
       .links li {
         align-items: flex-start;
         flex-direction: column;
         gap: 4px;
+      }
+
+      .day-slot {
+        grid-template-columns: 1fr;
+        gap: 5px;
+      }
+
+      .day-pill-row {
+        justify-content: flex-start;
       }
     }
   </style>
@@ -860,7 +1042,7 @@
     <div class="shell topbar-inner">
       <div class="brand" aria-label="Edinburgh festival shortlist">
         <strong>Edinburgh Festival Shortlist</strong>
-        <span>Five-star reviewed show planning</span>
+        <span>Arriving Friday 7 August 2026</span>
       </div>
       <div class="top-actions">
         <button class="button primary" type="button" id="criteriaButton">Criteria</button>
@@ -872,14 +1054,26 @@
     </div>
   </header>
 
+  <div class="day-nav-wrap">
+    <nav class="shell day-nav" aria-label="Day links">
+      <a href="#day-1">Day 1 <span>Fri 7 Aug</span></a>
+      <a href="#day-2">Day 2 <span>Sat 8 Aug</span></a>
+      <a href="#day-3">Day 3 <span>Sun 9 Aug</span></a>
+      <a href="#day-4">Day 4 <span>Mon 10 Aug</span></a>
+      <a href="#day-5">Day 5 <span>Tue 11 Aug</span></a>
+      <a href="#day-6">Day 6 <span>Wed 12 Aug</span></a>
+      <a href="#day-7">Day 7 <span>Thu 13 Aug</span></a>
+    </nav>
+  </div>
+
   <main class="shell">
     <section class="hero" aria-labelledby="page-title">
       <div class="intro">
         <div class="skyline" aria-hidden="true"></div>
         <div class="intro-copy">
           <p class="eyebrow">Festival shortlist board</p>
-          <h1 id="page-title">Build the Fringe week by slots.</h1>
-          <p>Use this board to coordinate six daily planning slots from 10:00 to midnight, protect slot 5 for dinner, and prioritise theatre, comedic theatre, music, Traverse, EIF, and Fringe shows with strong review or producer signals.</p>
+          <h1 id="page-title">Edinburgh week from 7 August.</h1>
+          <p>Use this board to coordinate the first Friday arrival and six full planning days, protect slot 5 for dinner, and prioritise theatre, comedic theatre, music, Traverse, EIF, and Fringe shows with strong review or producer signals.</p>
         </div>
       </div>
 
@@ -931,6 +1125,398 @@
         <div class="window dinner"><b>Slot 5</b><span>18:00-21:00 dinner</span></div>
         <div class="window"><b>Slot 6</b><span>21:00-24:00 late option</span></div>
       </div>
+    </section>
+
+    <section class="day-plans" aria-labelledby="day-plan-title">
+      <div class="day-plan-head">
+        <div class="section-heading">
+          <h2 id="day-plan-title">Day by day options</h2>
+          <p>Real 2026 show listings and real restaurant suggestions for Friday 7 August through Thursday 13 August. Nothing here is a reservation; every dinner and ticket still needs booking.</p>
+        </div>
+        <div class="day-plan-note">Research checked 18 June 2026. Festival listings and table availability can change quickly.</div>
+      </div>
+
+      <div class="day-grid">
+        <article class="day-card" id="day-1">
+          <div class="day-card-header">
+            <div>
+              <h3>Day 1 - Friday 7 August</h3>
+              <p>Arrival day. Keep this deliberately light: one early show, dinner, then one optional EIF pick if the group has energy.</p>
+            </div>
+            <div class="day-pill-row">
+              <span class="badge">Arrival from 17:00</span>
+              <span class="badge clay">No bookings held</span>
+            </div>
+          </div>
+          <ul class="day-slots">
+            <li class="day-slot">
+              <div class="slot-label">17:35<span>Slot 4</span></div>
+              <div>
+                <strong><a href="https://www.edfringe.com/tickets/whats-on/police-cops-the-original" target="_blank" rel="noreferrer">Police Cops: The Original</a></strong>
+                <p>Assembly George Square, 60 minutes. Strong arrival-night candidate because the listing carries a 20+ five-star review signal and it finishes before dinner.</p>
+              </div>
+            </li>
+            <li class="day-slot dinner">
+              <div class="slot-label">19:15<span>Dinner suggestion</span></div>
+              <div>
+                <strong><a href="https://www.la-sal.co.uk/" target="_blank" rel="noreferrer">LaSal</a></strong>
+                <p>Spanish restaurant at 22 Union Place, directly opposite Edinburgh Playhouse. Good first-night table-for-eight candidate if availability works.</p>
+              </div>
+            </li>
+            <li class="day-slot late">
+              <div class="slot-label">20:00<span>Optional EIF</span></div>
+              <div>
+                <strong><a href="https://www.traverse.co.uk/whats-on/event/medicine-edinburgh-international-festival" target="_blank" rel="noreferrer">Medicine</a></strong>
+                <p>Traverse 1, 90 minutes, Edinburgh International Festival. Choose this only if dinner moves early or becomes a post-show plan.</p>
+              </div>
+            </li>
+          </ul>
+        </article>
+
+        <article class="day-card" id="day-2">
+          <div class="day-card-header">
+            <div>
+              <h3>Day 2 - Saturday 8 August</h3>
+              <p>First full day. This is the cleanest run for the core Fringe shortlist, with an optional late Traverse target.</p>
+            </div>
+            <div class="day-pill-row">
+              <span class="badge gold">Core shortlist day</span>
+              <span class="badge">Theatre bias</span>
+            </div>
+          </div>
+          <ul class="day-slots">
+            <li class="day-slot">
+              <div class="slot-label">11:00<span>Slot 1</span></div>
+              <div>
+                <strong><a href="https://www.pleasance.co.uk/event/boiler-room-six-titanic-story" target="_blank" rel="noreferrer">Boiler Room Six: A Titanic Story</a></strong>
+                <p>Pleasance Dome, Queen Dome. Returning 2024 Fringe sell-out with a five-star signal on the listing.</p>
+              </div>
+            </li>
+            <li class="day-slot">
+              <div class="slot-label">13:35<span>Slot 2</span></div>
+              <div>
+                <strong><a href="https://www.edfringe.com/tickets/whats-on/alone" target="_blank" rel="noreferrer">ALONE</a></strong>
+                <p>Assembly George Square, The Box. Returning sci-fi thriller with multiple five-star and award signals in the official listing.</p>
+              </div>
+            </li>
+            <li class="day-slot">
+              <div class="slot-label">15:00<span>Slot 3</span></div>
+              <div>
+                <strong><a href="https://www.pleasance.co.uk/event/stay-little-longer" target="_blank" rel="noreferrer">Stay A Little Longer</a></strong>
+                <p>Pleasance Courtyard. Known-company pick from Tom Foreman Productions; keep it as review-watch until national notices land.</p>
+              </div>
+            </li>
+            <li class="day-slot">
+              <div class="slot-label">17:50<span>Slot 4</span></div>
+              <div>
+                <strong><a href="https://festival.summerhallarts.co.uk/events/roleplay/" target="_blank" rel="noreferrer">ROLEPLAY</a></strong>
+                <p>Summerhall Tech Cube Zero, 70 minutes. Francesca Moody Productions and Global Creatures, written/performed by Hannah Reilly and directed by Paige Rattray.</p>
+              </div>
+            </li>
+            <li class="day-slot dinner">
+              <div class="slot-label">19:30<span>Dinner suggestion</span></div>
+              <div>
+                <strong><a href="https://www.mamma-roma.net/" target="_blank" rel="noreferrer">Mamma Roma</a></strong>
+                <p>Italian restaurant at 4/7 Antigua Street, opposite Edinburgh Playhouse. Practical GBP50/head-style group option if they can take eight.</p>
+              </div>
+            </li>
+            <li class="day-slot late">
+              <div class="slot-label">21:30<span>Slot 6</span></div>
+              <div>
+                <strong><a href="https://www.traverse.co.uk/whats-on/event/the-singer" target="_blank" rel="noreferrer">The Singer</a></strong>
+                <p>Traverse late-slot music theatre with original songs by KT Tunstall. Check availability or waitlist status before treating this as fixed.</p>
+              </div>
+            </li>
+          </ul>
+        </article>
+
+        <article class="day-card" id="day-3">
+          <div class="day-card-header">
+            <div>
+              <h3>Day 3 - Sunday 9 August</h3>
+              <p>Use Sunday to catch a national-preview pick and keep the late slot flexible around Traverse availability.</p>
+            </div>
+            <div class="day-pill-row">
+              <span class="badge">Guardian signal</span>
+              <span class="badge plum">Traverse watch</span>
+            </div>
+          </div>
+          <ul class="day-slots">
+            <li class="day-slot">
+              <div class="slot-label">11:00<span>Slot 1</span></div>
+              <div>
+                <strong><a href="https://www.edfringe.com/tickets/whats-on/boiler-room-six-a-titanic-story" target="_blank" rel="noreferrer">Boiler Room Six: A Titanic Story</a></strong>
+                <p>Backup morning if it was missed on Saturday, or a clean repeatable slot for anyone arriving late.</p>
+              </div>
+            </li>
+            <li class="day-slot">
+              <div class="slot-label">12:45<span>Slot 2</span></div>
+              <div>
+                <strong><a href="https://underbellyedinburgh.co.uk/event/the-jolly-fisherman" target="_blank" rel="noreferrer">The Jolly Fisherman</a></strong>
+                <p>Underbelly George Square. Guardian must-see theatre pick; good slot 2 option if the group wants a new-play punt.</p>
+              </div>
+            </li>
+            <li class="day-slot">
+              <div class="slot-label">15:00<span>Slot 3</span></div>
+              <div>
+                <strong><a href="https://www.edfringe.com/tickets/whats-on/stay-a-little-longer" target="_blank" rel="noreferrer">Stay A Little Longer</a></strong>
+                <p>Second chance for the Tom Foreman Productions watchlist slot, with enough walking buffer after Underbelly.</p>
+              </div>
+            </li>
+            <li class="day-slot">
+              <div class="slot-label">17:35<span>Slot 4</span></div>
+              <div>
+                <strong><a href="https://www.edfringe.com/tickets/whats-on/police-cops-the-original" target="_blank" rel="noreferrer">Police Cops: The Original</a></strong>
+                <p>Use here if the group skips it on arrival night. Otherwise swap in ROLEPLAY at 17:50.</p>
+              </div>
+            </li>
+            <li class="day-slot dinner">
+              <div class="slot-label">19:15<span>Dinner suggestion</span></div>
+              <div>
+                <strong><a href="https://www.theolivebranchscotland.co.uk/" target="_blank" rel="noreferrer">The Olive Branch</a></strong>
+                <p>Broughton Street bistro, table-for-seven-plus bookings handled by phone/email. Good lower-spend Sunday dinner candidate.</p>
+              </div>
+            </li>
+            <li class="day-slot late">
+              <div class="slot-label">20:30<span>Slot 6 check</span></div>
+              <div>
+                <strong><a href="https://www.traverse.co.uk/whats-on/event/supposing" target="_blank" rel="noreferrer">Supposing:</a></strong>
+                <p>Traverse 2, written and directed by Zinnie Harris. Public listing shows some early performances as sold out, so treat this as a waitlist or swap target.</p>
+              </div>
+            </li>
+          </ul>
+        </article>
+
+        <article class="day-card" id="day-4">
+          <div class="day-card-header">
+            <div>
+              <h3>Day 4 - Monday 10 August</h3>
+              <p>Use Monday for EIF, Gilded Balloon theatre, and one lighter magic option before dinner.</p>
+            </div>
+            <div class="day-pill-row">
+              <span class="badge">EIF priority</span>
+              <span class="badge">Wildcard allowed</span>
+            </div>
+          </div>
+          <ul class="day-slots">
+            <li class="day-slot">
+              <div class="slot-label">11:00<span>Slot 1</span></div>
+              <div>
+                <strong><a href="https://www.pleasance.co.uk/event/boiler-room-six-titanic-story" target="_blank" rel="noreferrer">Boiler Room Six: A Titanic Story</a></strong>
+                <p>Morning anchor or backup for anyone who missed the Saturday/Sunday run.</p>
+              </div>
+            </li>
+            <li class="day-slot">
+              <div class="slot-label">14:00<span>Slot 3</span></div>
+              <div>
+                <strong><a href="https://www.traverse.co.uk/whats-on/event/medicine-edinburgh-international-festival" target="_blank" rel="noreferrer">Medicine</a></strong>
+                <p>Traverse 1, 90 minutes, EIF world-premiere slot. A better fit here than Friday because it does not collide with arrival dinner.</p>
+              </div>
+            </li>
+            <li class="day-slot">
+              <div class="slot-label">16:00<span>Slot 4</span></div>
+              <div>
+                <strong><a href="https://www.edfringe.com/tickets/whats-on/non-human-animal" target="_blank" rel="noreferrer">NON HUMAN ANIMAL</a></strong>
+                <p>Gilded Balloon Teviot. Kat Woods dark Irish comedy, 60 minutes; useful known-writer/director signal even before reviews land.</p>
+              </div>
+            </li>
+            <li class="day-slot">
+              <div class="slot-label">17:30<span>Wildcard</span></div>
+              <div>
+                <strong><a href="https://www.edfringe.com/tickets/whats-on/1-hour-of-insane-magic" target="_blank" rel="noreferrer">1 Hour of Insane Magic</a></strong>
+                <p>Gilded Balloon Teviot. Fourth-year return with five-star signal; counts as one deliberate wildcard because it is magic rather than theatre.</p>
+              </div>
+            </li>
+            <li class="day-slot dinner">
+              <div class="slot-label">19:15<span>Dinner suggestion</span></div>
+              <div>
+                <strong><a href="https://www.1802loungeandgrill.co.uk/" target="_blank" rel="noreferrer">1802 Lounge & Grill</a></strong>
+                <p>Next to Edinburgh Playhouse, open daily in the evening. Practical mid-spend dinner after a Teviot/Gilded Balloon afternoon.</p>
+              </div>
+            </li>
+            <li class="day-slot late">
+              <div class="slot-label">21:00<span>Reviews pass</span></div>
+              <div>
+                <strong>Hold for newly reviewed five-star shows</strong>
+                <p>Keep Monday late flexible. By this point the first wave of 2026 reviews should start clarifying which wildcards deserve attention.</p>
+              </div>
+            </li>
+          </ul>
+        </article>
+
+        <article class="day-card" id="day-5">
+          <div class="day-card-header">
+            <div>
+              <h3>Day 5 - Tuesday 11 August</h3>
+              <p>Traverse-heavy day if availability works, with a higher-spend dinner candidate.</p>
+            </div>
+            <div class="day-pill-row">
+              <span class="badge plum">Traverse priority</span>
+              <span class="badge gold">Higher-spend dinner</span>
+            </div>
+          </div>
+          <ul class="day-slots">
+            <li class="day-slot">
+              <div class="slot-label">10:30<span>Slot 1 check</span></div>
+              <div>
+                <strong><a href="https://www.traverse.co.uk/whats-on/event/supposing" target="_blank" rel="noreferrer">Supposing:</a></strong>
+                <p>Zinnie Harris world premiere. Use as a priority if tickets appear; otherwise move Boiler Room Six or ALONE into this slot.</p>
+              </div>
+            </li>
+            <li class="day-slot">
+              <div class="slot-label">13:35<span>Slot 2</span></div>
+              <div>
+                <strong><a href="https://edinburghfestival.datathistle.com/event/2980565-alone/" target="_blank" rel="noreferrer">ALONE</a></strong>
+                <p>Assembly George Square. Keeps a proven five-star-review signal in the day if the Traverse morning does not work out.</p>
+              </div>
+            </li>
+            <li class="day-slot">
+              <div class="slot-label">15:00<span>Slot 3</span></div>
+              <div>
+                <strong><a href="https://www.edfringe.com/tickets/whats-on/stay-a-little-longer" target="_blank" rel="noreferrer">Stay A Little Longer</a></strong>
+                <p>Review-watch theatre slot. Replace with a newly reviewed five-star pick if this has not picked up national support by festival week.</p>
+              </div>
+            </li>
+            <li class="day-slot">
+              <div class="slot-label">17:50<span>Slot 4</span></div>
+              <div>
+                <strong><a href="https://www.edfringe.com/tickets/whats-on/roleplay" target="_blank" rel="noreferrer">ROLEPLAY</a></strong>
+                <p>Francesca Moody producer signal and Time Out/Guardian preview attention. A good slot 4 target if Saturday was too packed.</p>
+              </div>
+            </li>
+            <li class="day-slot dinner">
+              <div class="slot-label">19:30<span>Dinner suggestion</span></div>
+              <div>
+                <strong><a href="https://thehawksmoor.com/locations/edinburgh/" target="_blank" rel="noreferrer">Hawksmoor Edinburgh</a></strong>
+                <p>St Andrew Square steak and seafood restaurant with private dining options. Best fit for the GBP100/head mix if the group wants one bigger dinner.</p>
+              </div>
+            </li>
+            <li class="day-slot late">
+              <div class="slot-label">21:15<span>Slot 6 check</span></div>
+              <div>
+                <strong><a href="https://www.traverse.co.uk/whats-on/event/the-singer" target="_blank" rel="noreferrer">The Singer</a></strong>
+                <p>Traverse late music-theatre option. Check ticket status before planning dinner around it.</p>
+              </div>
+            </li>
+          </ul>
+        </article>
+
+        <article class="day-card" id="day-6">
+          <div class="day-card-header">
+            <div>
+              <h3>Day 6 - Wednesday 12 August</h3>
+              <p>Good day for a balanced mix: core five-star signals, Traverse, and a group-friendly dinner option.</p>
+            </div>
+            <div class="day-pill-row">
+              <span class="badge">Balanced day</span>
+              <span class="badge">Group booking focus</span>
+            </div>
+          </div>
+          <ul class="day-slots">
+            <li class="day-slot">
+              <div class="slot-label">11:00<span>Slot 1</span></div>
+              <div>
+                <strong><a href="https://www.pleasance.co.uk/event/boiler-room-six-titanic-story" target="_blank" rel="noreferrer">Boiler Room Six: A Titanic Story</a></strong>
+                <p>Still the clearest morning five-star/returning-show fit in the current data.</p>
+              </div>
+            </li>
+            <li class="day-slot">
+              <div class="slot-label">12:45<span>Slot 2 check</span></div>
+              <div>
+                <strong><a href="https://www.traverse.co.uk/whats-on/event/supposing" target="_blank" rel="noreferrer">Supposing:</a></strong>
+                <p>Traverse 2. Use Wednesday if the visible ticket status is better than earlier dates.</p>
+              </div>
+            </li>
+            <li class="day-slot">
+              <div class="slot-label">15:00<span>Slot 3</span></div>
+              <div>
+                <strong><a href="https://www.pleasance.co.uk/event/stay-little-longer" target="_blank" rel="noreferrer">Stay A Little Longer</a></strong>
+                <p>Known-company watchlist option that fits cleanly after a 12:45 Traverse slot.</p>
+              </div>
+            </li>
+            <li class="day-slot">
+              <div class="slot-label">17:35<span>Slot 4</span></div>
+              <div>
+                <strong><a href="https://www.edfringe.com/tickets/whats-on/police-cops-the-original" target="_blank" rel="noreferrer">Police Cops: The Original</a></strong>
+                <p>Reliable comedic-theatre slot if not already seen, or a fallback for anyone who missed the group pick.</p>
+              </div>
+            </li>
+            <li class="day-slot dinner">
+              <div class="slot-label">19:15<span>Dinner suggestion</span></div>
+              <div>
+                <strong><a href="https://www.dishoom.com/edinburgh/" target="_blank" rel="noreferrer">Dishoom Edinburgh</a></strong>
+                <p>St Andrew Square. After 18:00, Dishoom accepts bookings for groups of six or more, so eight people fits the policy if slots are available.</p>
+              </div>
+            </li>
+            <li class="day-slot late">
+              <div class="slot-label">21:15<span>Slot 6</span></div>
+              <div>
+                <strong><a href="https://www.traverse.co.uk/whats-on/event/the-singer" target="_blank" rel="noreferrer">The Singer</a></strong>
+                <p>Late Traverse music slot. Good if the group wants music rather than another comedy/theatre pick.</p>
+              </div>
+            </li>
+          </ul>
+        </article>
+
+        <article class="day-card" id="day-7">
+          <div class="day-card-header">
+            <div>
+              <h3>Day 7 - Thursday 13 August</h3>
+              <p>Final planned day. Use this to catch anything missed, then choose between a bigger dinner or an EIF evening.</p>
+            </div>
+            <div class="day-pill-row">
+              <span class="badge">Final catch-up</span>
+              <span class="badge clay">Choose dinner or EIF</span>
+            </div>
+          </div>
+          <ul class="day-slots">
+            <li class="day-slot">
+              <div class="slot-label">11:00<span>Slot 1</span></div>
+              <div>
+                <strong><a href="https://www.edfringe.com/tickets/whats-on/boiler-room-six-a-titanic-story" target="_blank" rel="noreferrer">Boiler Room Six: A Titanic Story</a></strong>
+                <p>Final clean chance in the first week for the morning five-star/returning-show candidate.</p>
+              </div>
+            </li>
+            <li class="day-slot">
+              <div class="slot-label">13:35<span>Slot 2</span></div>
+              <div>
+                <strong><a href="https://www.edfringe.com/tickets/whats-on/alone" target="_blank" rel="noreferrer">ALONE</a></strong>
+                <p>Final catch-up slot for the multiple-award/five-star sci-fi thriller.</p>
+              </div>
+            </li>
+            <li class="day-slot">
+              <div class="slot-label">15:15<span>Slot 3 check</span></div>
+              <div>
+                <strong><a href="https://www.traverse.co.uk/whats-on/event/supposing" target="_blank" rel="noreferrer">Supposing:</a></strong>
+                <p>Traverse option if tickets are visible; otherwise use Stay A Little Longer at 15:00.</p>
+              </div>
+            </li>
+            <li class="day-slot">
+              <div class="slot-label">17:30<span>Slot 4</span></div>
+              <div>
+                <strong><a href="https://www.edfringe.com/tickets/whats-on/1-hour-of-insane-magic" target="_blank" rel="noreferrer">1 Hour of Insane Magic</a></strong>
+                <p>Wildcard closer before dinner, or swap back to Police Cops at 17:35 if the group wants a stronger theatre/comedy signal.</p>
+              </div>
+            </li>
+            <li class="day-slot dinner">
+              <div class="slot-label">19:15<span>Dinner suggestion</span></div>
+              <div>
+                <strong><a href="https://www.thedomeedinburgh.com/reservations" target="_blank" rel="noreferrer">The Dome</a></strong>
+                <p>Wildcard central dinner with private dining capacity. Use if the group wants a more set-piece final meal and booking availability works.</p>
+              </div>
+            </li>
+            <li class="day-slot late">
+              <div class="slot-label">20:00<span>EIF option</span></div>
+              <div>
+                <strong><a href="https://www.traverse.co.uk/whats-on/event/medicine-edinburgh-international-festival" target="_blank" rel="noreferrer">Medicine</a></strong>
+                <p>Thursday EIF performance at Traverse 1. This competes with dinner, so choose either an early meal or a post-show table.</p>
+              </div>
+            </li>
+          </ul>
+        </article>
+      </div>
+
+      <p class="source-note">Use this as a booking worksheet: pick one show per slot, check walking time, then replace weaker review-watch items with fresh five-star national reviews as they appear.</p>
     </section>
 
     <section class="schedule" aria-labelledby="schedule-title">
@@ -1117,20 +1703,98 @@
               <li><a href="https://www.insanemagic.co.uk/" target="_blank" rel="noreferrer">Company site</a></li>
             </ul>
           </article>
-          <article class="show-card show-item" data-rating="unrated" data-history="first" data-window="unknown" data-genre="theatre" data-programme="fringe">
+          <article class="show-card show-item" data-rating="unrated" data-history="first" data-window="16-18" data-genre="theatre" data-programme="fringe">
             <div class="show-summary">
               <h3>Roleplay</h3>
-              <a class="show-link" href="https://www.theguardian.com/stage/2026/jun/04/edinburgh-festival-2026-must-see-theatre" target="_blank" rel="noreferrer">Guardian pick</a>
+              <a class="show-link" href="https://festival.summerhallarts.co.uk/events/roleplay/" target="_blank" rel="noreferrer">Show page</a>
             </div>
-            <p>Guardian and Time Out both flag ROLEPLAY as a 2026 show to watch, with producer Francesca Moody noted as a strong Fringe signal. It needs star reviews and exact timing before it can become a priority match.</p>
+            <p>Guardian and Time Out both flag ROLEPLAY as a 2026 show to watch, with producer Francesca Moody noted as a strong Fringe signal. Summerhall lists it at 17:50 for 70 minutes; it still needs star reviews before it becomes a priority match.</p>
             <div class="badge-row">
               <span class="badge">National preview</span>
               <span class="badge">Producer signal</span>
               <span class="badge clay">Needs reviews</span>
             </div>
             <ul class="source-list">
+              <li><a href="https://festival.summerhallarts.co.uk/events/roleplay/" target="_blank" rel="noreferrer">Summerhall</a></li>
               <li><a href="https://www.theguardian.com/stage/2026/jun/04/edinburgh-festival-2026-must-see-theatre" target="_blank" rel="noreferrer">Guardian</a></li>
               <li><a href="https://www.timeout.com/edinburgh/theatre/best-edinburgh-festival-fringe-theatre-shows" target="_blank" rel="noreferrer">Time Out</a></li>
+            </ul>
+          </article>
+          <article class="show-card show-item" data-rating="unrated" data-history="first" data-window="12-14" data-genre="theatre" data-programme="fringe">
+            <div class="show-summary">
+              <h3>The Jolly Fisherman</h3>
+              <a class="show-link" href="https://underbellyedinburgh.co.uk/event/the-jolly-fisherman" target="_blank" rel="noreferrer">Show page</a>
+            </div>
+            <p>Underbelly George Square new play listed for 12:45. The Guardian includes it in its 2026 must-see theatre list, so it is a credible preview pick while star reviews are pending.</p>
+            <div class="badge-row">
+              <span class="badge">Guardian preview</span>
+              <span class="badge">12:45</span>
+              <span class="badge clay">Needs reviews</span>
+            </div>
+            <ul class="source-list">
+              <li><a href="https://underbellyedinburgh.co.uk/event/the-jolly-fisherman" target="_blank" rel="noreferrer">Underbelly</a></li>
+              <li><a href="https://www.theguardian.com/stage/2026/jun/04/edinburgh-festival-2026-must-see-theatre" target="_blank" rel="noreferrer">Guardian</a></li>
+            </ul>
+          </article>
+          <article class="show-card show-item" data-rating="unrated" data-history="first" data-window="14-16" data-genre="theatre" data-programme="eif">
+            <div class="show-summary">
+              <h3>Medicine</h3>
+              <a class="show-link" href="https://www.traverse.co.uk/whats-on/event/medicine-edinburgh-international-festival" target="_blank" rel="noreferrer">Show page</a>
+            </div>
+            <p>EIF world premiere at Traverse 1, 90 minutes. Listed at 20:00 on 7, 8, 11 and 13 August, and 14:00 on 10 and 12 August.</p>
+            <div class="badge-row">
+              <span class="badge plum">EIF</span>
+              <span class="badge">Traverse 1</span>
+              <span class="badge clay">Dinner conflict on 20:00 dates</span>
+            </div>
+            <ul class="source-list">
+              <li><a href="https://www.traverse.co.uk/whats-on/event/medicine-edinburgh-international-festival" target="_blank" rel="noreferrer">Traverse listing</a></li>
+            </ul>
+          </article>
+          <article class="show-card show-item" data-rating="unrated" data-history="first" data-window="10-12" data-genre="theatre" data-programme="traverse">
+            <div class="show-summary">
+              <h3>Supposing:</h3>
+              <a class="show-link" href="https://www.traverse.co.uk/whats-on/event/supposing" target="_blank" rel="noreferrer">Show page</a>
+            </div>
+            <p>Traverse Theatre world premiere written and directed by Zinnie Harris. Strong known-director signal, but some early dates show sold-out status, so check availability before relying on it.</p>
+            <div class="badge-row">
+              <span class="badge plum">Traverse</span>
+              <span class="badge">Known director</span>
+              <span class="badge clay">Availability risk</span>
+            </div>
+            <ul class="source-list">
+              <li><a href="https://www.traverse.co.uk/whats-on/event/supposing" target="_blank" rel="noreferrer">Traverse listing</a></li>
+            </ul>
+          </article>
+          <article class="show-card show-item" data-rating="unrated" data-history="first" data-window="16-18" data-genre="comedic-theatre" data-programme="fringe">
+            <div class="show-summary">
+              <h3>NON HUMAN ANIMAL</h3>
+              <a class="show-link" href="https://www.edfringe.com/tickets/whats-on/non-human-animal" target="_blank" rel="noreferrer">Show page</a>
+            </div>
+            <p>Kat Woods dark Irish comedy at Gilded Balloon Teviot, listed at 16:00 on 5-10, 12-17, 19-24 and 26-31 August. Known creator signal, reviews pending.</p>
+            <div class="badge-row">
+              <span class="badge">Known writer</span>
+              <span class="badge">16:00</span>
+              <span class="badge clay">Needs reviews</span>
+            </div>
+            <ul class="source-list">
+              <li><a href="https://www.edfringe.com/tickets/whats-on/non-human-animal" target="_blank" rel="noreferrer">Fringe listing</a></li>
+              <li><a href="https://tickets.gildedballoon.co.uk/event/14%3A7138/" target="_blank" rel="noreferrer">Gilded Balloon</a></li>
+            </ul>
+          </article>
+          <article class="show-card show-item" data-rating="unrated" data-history="first" data-window="21-24" data-genre="music" data-programme="traverse">
+            <div class="show-summary">
+              <h3>The Singer</h3>
+              <a class="show-link" href="https://www.traverse.co.uk/whats-on/event/the-singer" target="_blank" rel="noreferrer">Show page</a>
+            </div>
+            <p>Traverse late music-theatre option with music and lyrics by KT Tunstall, performed in spoken English and BSL. Use as a late-slot target once ticket status is checked.</p>
+            <div class="badge-row">
+              <span class="badge plum">Traverse</span>
+              <span class="badge">Music theatre</span>
+              <span class="badge clay">Check availability</span>
+            </div>
+            <ul class="source-list">
+              <li><a href="https://www.traverse.co.uk/whats-on/event/the-singer" target="_blank" rel="noreferrer">Traverse listing</a></li>
             </ul>
           </article>
         </div>
@@ -1155,14 +1819,50 @@
       <div class="restaurant-grid" aria-label="Restaurant candidate examples">
         <article class="restaurant-card">
           <h3>Mamma Roma</h3>
-          <p>Italian option close to Edinburgh Playhouse. Useful as a GBP50/head-style candidate if group tables are available.</p>
+          <p>Italian option at 4/7 Antigua Street, opposite Edinburgh Playhouse. Useful as a GBP50/head-style candidate if group tables are available.</p>
           <div class="badge-row">
             <span class="badge">Near Playhouse</span>
             <span class="badge">GBP50 target</span>
             <span class="badge clay">Verify table for 8</span>
           </div>
           <ul class="source-list">
-            <li><a href="https://mammaromaedinburgh.co.uk/" target="_blank" rel="noreferrer">Restaurant site</a></li>
+            <li><a href="https://www.mamma-roma.net/" target="_blank" rel="noreferrer">Restaurant site</a></li>
+          </ul>
+        </article>
+        <article class="restaurant-card">
+          <h3>LaSal</h3>
+          <p>Spanish restaurant at 22 Union Place, directly opposite Edinburgh Playhouse. Good arrival-night option because the location is simple.</p>
+          <div class="badge-row">
+            <span class="badge">Opposite Playhouse</span>
+            <span class="badge">GBP50 target</span>
+            <span class="badge clay">Book ahead</span>
+          </div>
+          <ul class="source-list">
+            <li><a href="https://www.la-sal.co.uk/" target="_blank" rel="noreferrer">Restaurant site</a></li>
+          </ul>
+        </article>
+        <article class="restaurant-card">
+          <h3>1802 Lounge & Grill</h3>
+          <p>Scottish/international grill next to Edinburgh Playhouse, with evening opening noted on booking listings. Good practical mid-spend slot.</p>
+          <div class="badge-row">
+            <span class="badge">Next to Playhouse</span>
+            <span class="badge">Mid-spend</span>
+            <span class="badge clay">Check group table</span>
+          </div>
+          <ul class="source-list">
+            <li><a href="https://www.1802loungeandgrill.co.uk/" target="_blank" rel="noreferrer">Restaurant site</a></li>
+          </ul>
+        </article>
+        <article class="restaurant-card">
+          <h3>The Olive Branch</h3>
+          <p>Broughton Street bistro with published guidance to contact the restaurant for tables of seven or more.</p>
+          <div class="badge-row">
+            <span class="badge">Broughton Street</span>
+            <span class="badge">GBP50 target</span>
+            <span class="badge clay">Phone/email for 8</span>
+          </div>
+          <ul class="source-list">
+            <li><a href="https://www.theolivebranchscotland.co.uk/bookings" target="_blank" rel="noreferrer">Bookings</a></li>
           </ul>
         </article>
         <article class="restaurant-card">
@@ -1178,13 +1878,40 @@
           </ul>
         </article>
         <article class="restaurant-card">
-          <h3>Wildcard dinner</h3>
-          <p>One dinner can be a longer walk if it is genuinely worth it. Keep it non-Leith unless the group explicitly overrides the brief.</p>
+          <h3>Dishoom Edinburgh</h3>
+          <p>St Andrew Square Indian restaurant. Useful because the published policy accepts bookings after 18:00 for groups of six or more.</p>
           <div class="badge-row">
-            <span class="badge plum">1 wildcard allowed</span>
-            <span class="badge clay">No Leith</span>
-            <span class="badge">Worth-it test</span>
+            <span class="badge">Group policy fits 8</span>
+            <span class="badge">Central</span>
+            <span class="badge clay">Availability varies</span>
           </div>
+          <ul class="source-list">
+            <li><a href="https://www.dishoom.com/edinburgh/" target="_blank" rel="noreferrer">Restaurant site</a></li>
+          </ul>
+        </article>
+        <article class="restaurant-card">
+          <h3>The Dome</h3>
+          <p>Central set-piece dinner option with published private dining capacity. Use as the one wildcard-style final meal if the group wants something bigger.</p>
+          <div class="badge-row">
+            <span class="badge plum">Wildcard dinner</span>
+            <span class="badge">Private dining</span>
+            <span class="badge clay">Book early</span>
+          </div>
+          <ul class="source-list">
+            <li><a href="https://www.thedomeedinburgh.com/privatedining" target="_blank" rel="noreferrer">Private dining</a></li>
+          </ul>
+        </article>
+        <article class="restaurant-card">
+          <h3>Bonnie & Wild</h3>
+          <p>St James Quarter food hall with no-booking casual group fallback. Better as a flexible lunch or emergency dinner than a set restaurant booking.</p>
+          <div class="badge-row">
+            <span class="badge">No booking fallback</span>
+            <span class="badge">St James Quarter</span>
+            <span class="badge clay">Not a formal dinner</span>
+          </div>
+          <ul class="source-list">
+            <li><a href="https://bonnieandwildmarket.com/" target="_blank" rel="noreferrer">Food hall site</a></li>
+          </ul>
         </article>
       </div>
     </section>

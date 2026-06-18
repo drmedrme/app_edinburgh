@@ -2,7 +2,23 @@
 
 Static GitHub Pages app for shortlisting Edinburgh Festival shows.
 
-The app is intentionally a plain `index.html` so it can be published directly with GitHub Pages and shared without a backend. The current version is a framework for building the Edinburgh week around show slots, dinner slots, and review-led shortlisting.
+The app is intentionally a plain `index.html` so it can be published directly with GitHub Pages and shared without a backend. The current version is a working planning board for the Edinburgh week starting Friday 7 August 2026, with day links, show slots, dinner slots, and review-led shortlisting.
+
+## Current Trip Dates
+
+The public app currently plans Day 1 to Day 7:
+
+```text
+Day 1: Friday 7 August 2026 - arrival from 17:00
+Day 2: Saturday 8 August 2026
+Day 3: Sunday 9 August 2026
+Day 4: Monday 10 August 2026
+Day 5: Tuesday 11 August 2026
+Day 6: Wednesday 12 August 2026
+Day 7: Thursday 13 August 2026
+```
+
+The day-by-day plan uses real 2026 show listings and real restaurant suggestions, but nothing in the repo is a booking confirmation. Treat every show, table, and walking transfer as needing a final check before purchase or reservation.
 
 ## Trip Slot Model
 
@@ -46,6 +62,12 @@ The current page includes real 2026 examples to show how the data should be capt
 - `ALONE` - 13:35, returning production, multiple five-star signals and awards on the Fringe listing.
 - `Stay A Little Longer` - 15:00, known creative-team signal, but needs current reviews.
 - `Police Cops: The Original` - 17:35, returning production, 20+ five-star review claim on the Fringe listing.
+- `ROLEPLAY` - 17:50, Francesca Moody producer signal and national preview picks, but needs reviews.
+- `The Jolly Fisherman` - 12:45, Guardian preview pick, but needs reviews.
+- `Medicine` - EIF / Traverse option at 20:00 or 14:00 depending on date.
+- `Supposing:` - Traverse world premiere by Zinnie Harris, strong known-director signal, availability risk.
+- `NON HUMAN ANIMAL` - 16:00, Kat Woods known-creator signal, reviews pending.
+- `The Singer` - Traverse late music-theatre option with music and lyrics by KT Tunstall, availability risk.
 - `Tell Me` - 19:00, strong company/review signal but outside the daytime window.
 - `1 Hour of Insane Magic` - five-star signal and prior Edinburgh history, but exact daytime fit needs checking.
 
@@ -70,7 +92,18 @@ Dinner is slot 5. The target is restaurant dinners Saturday to Thursday for eigh
 - Allow one wildcard restaurant with a longer walk.
 - Do not include Leith restaurants unless the group explicitly overrides the brief.
 
-The page currently includes a couple of restaurant candidate examples to demonstrate the data shape, not final booking recommendations. Verify availability, distance, and suitability for a table of eight before booking.
+The page currently includes real restaurant suggestions used in the day plan:
+
+- `LaSal` - opposite Edinburgh Playhouse, good arrival-night candidate.
+- `Mamma Roma` - opposite Edinburgh Playhouse, practical Italian group option.
+- `1802 Lounge & Grill` - next to Edinburgh Playhouse, mid-spend Scottish/international grill.
+- `The Olive Branch` - Broughton Street bistro; tables of seven or more require direct contact.
+- `Hawksmoor Edinburgh` - higher-spend steak/seafood candidate for the GBP100/head mix.
+- `Dishoom Edinburgh` - St Andrew Square; after 18:00, published policy accepts bookings for groups of six or more.
+- `The Dome` - central wildcard/set-piece dinner with private dining capacity.
+- `Bonnie & Wild` - St James Quarter no-booking food hall fallback.
+
+Verify availability, distance, and suitability for a table of eight before booking.
 
 ## Local Serving
 
