@@ -251,6 +251,7 @@
 
     .card,
     .schedule,
+    .dinner-plan,
     .links {
       min-width: 0;
       border: 1px solid rgba(24, 33, 31, 0.11);
@@ -274,6 +275,7 @@
     .card h3,
     .section-heading h2,
     .schedule h2,
+    .dinner-plan h2,
     .links h2,
     .show-card h3,
     .slot-card h3,
@@ -285,6 +287,7 @@
 
     .card h2,
     .schedule h2,
+    .dinner-plan h2,
     .links h2,
     .criteria-dialog h2 {
       font-size: 1.68rem;
@@ -337,9 +340,38 @@
       margin-bottom: 2px;
     }
 
+    .plan-grid {
+      margin-top: 24px;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .plan-card {
+      min-width: 0;
+      min-height: 150px;
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--panel);
+      box-shadow: 0 10px 24px rgba(24, 33, 31, 0.08);
+    }
+
+    .plan-card h3 {
+      margin: 0;
+      line-height: 1.15;
+      letter-spacing: 0;
+      font-size: 1.04rem;
+    }
+
+    .plan-card p {
+      margin: 8px 0 0;
+      color: var(--muted);
+    }
+
     .window-strip {
       display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
+      grid-template-columns: repeat(6, minmax(0, 1fr));
       gap: 10px;
     }
 
@@ -349,6 +381,11 @@
       border: 1px solid var(--line);
       border-radius: var(--radius);
       background: #fbfaf6;
+    }
+
+    .window.dinner {
+      border-color: rgba(168, 88, 66, 0.32);
+      background: #fff6f1;
     }
 
     .window b {
@@ -378,7 +415,7 @@
 
     .filter-panel {
       display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
+      grid-template-columns: repeat(5, minmax(0, 1fr));
       gap: 12px;
       padding: 16px 20px;
       border-bottom: 1px solid var(--line);
@@ -592,6 +629,66 @@
       display: block;
     }
 
+    .dinner-plan {
+      margin-top: 24px;
+      padding: 20px;
+    }
+
+    .restaurant-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 16px;
+    }
+
+    .restaurant-card {
+      min-width: 0;
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fbfaf6;
+    }
+
+    .restaurant-card h3 {
+      margin: 0;
+      line-height: 1.15;
+      letter-spacing: 0;
+      font-size: 1.04rem;
+    }
+
+    .restaurant-card p {
+      margin: 8px 0 0;
+      color: var(--muted);
+    }
+
+    .agenda-list {
+      display: grid;
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+      gap: 8px;
+      margin: 16px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .agenda-list li {
+      min-height: 88px;
+      padding: 10px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: #fff;
+    }
+
+    .agenda-list b {
+      display: block;
+      color: var(--green);
+    }
+
+    .agenda-list span {
+      display: block;
+      color: var(--muted);
+      font-size: 0.86rem;
+    }
+
     .links {
       margin-top: 14px;
       padding: 20px;
@@ -666,6 +763,9 @@
     @media (max-width: 960px) {
       .hero,
       .show-grid,
+      .restaurant-grid,
+      .agenda-list,
+      .plan-grid,
       .window-strip,
       .filter-panel {
         grid-template-columns: 1fr;
@@ -778,41 +878,58 @@
         <div class="skyline" aria-hidden="true"></div>
         <div class="intro-copy">
           <p class="eyebrow">Festival shortlist board</p>
-          <h1 id="page-title">Find the strongest daytime shows.</h1>
-          <p>Use this board to coordinate Edinburgh Festival options in two-hour windows from 10:00 to 18:00, prioritising shows with five-star reviews, national coverage, known directors, and evidence of a strong previous festival run.</p>
+          <h1 id="page-title">Build the Fringe week by slots.</h1>
+          <p>Use this board to coordinate six daily planning slots from 10:00 to midnight, protect slot 5 for dinner, and prioritise theatre, comedic theatre, music, Traverse, EIF, and Fringe shows with strong review or producer signals.</p>
         </div>
       </div>
 
       <aside class="panel" aria-label="Selection summary">
         <article class="card accent">
-          <h2>Priority filter</h2>
-          <p>Known director or company, preferably five-star reviewed, reviewed by a credible outlet, and credible enough to plan a daytime slot around.</p>
+          <h2>Contributor brief</h2>
+          <p>Sat-Thu should use six two-to-three-hour slots. The first Friday starts at 17:00 with three slots, including dinner.</p>
         </article>
         <article class="card criteria-card">
-          <h3>Working assumption</h3>
-          <p>Some shows may return after a previous Edinburgh run because they reviewed so well. Treat that as a useful signal, then verify dates, venue, and current reviews before booking.</p>
+          <h3>Show selection</h3>
+          <p>Prefer slot availability, multiple reputable five-star reviews from 2025 or 2024, reputable producers, and insider picks from outlets such as Time Out, Guardian, Times, or Scotsman.</p>
         </article>
         <article class="card">
-          <h3>Core hours</h3>
-          <p>Build the day from 10:00 to 18:00, leaving evenings open for meals, rest, or bigger ticketed events.</p>
+          <h3>Movement rule</h3>
+          <p>Assume one hour for daytime performances, then allow 30 minutes or a specific walking-time check between shows.</p>
         </article>
         <article class="card">
-          <h3>Fallback tab</h3>
-          <p>Use Other Shows for strong reviews that miss one of the strict criteria, sit outside the daytime window, or need more checking.</p>
+          <h3>Dinner base</h3>
+          <p>Slot 5 is dinner. Look for Sat-Thu restaurants for eight people within a 20-minute walk of Edinburgh Playhouse / Greenside, avoiding Leith.</p>
         </article>
       </aside>
     </section>
 
+    <section class="plan-grid" aria-label="Trip planning rules">
+      <article class="plan-card">
+        <h3>Sat-Thu full-day pattern</h3>
+        <p>Use slots 1-6: 10-12, 12-14, 14-16, 16-18, dinner 18-21, and late 21-24. Keep 30 minutes of leeway between adjacent show slots.</p>
+      </article>
+      <article class="plan-card">
+        <h3>First Friday pattern</h3>
+        <p>Start from 17:00. Plan three slots only: an early arrival/show option, slot 5 dinner, and one late show or wildcard.</p>
+      </article>
+      <article class="plan-card">
+        <h3>Wildcards</h3>
+        <p>Allow two to four unusual or weird shows, but keep them labelled so they do not crowd out proven five-star candidates.</p>
+      </article>
+    </section>
+
     <section class="card" aria-labelledby="windows-title">
       <div class="section-heading">
-        <h2 id="windows-title">Two-hour planning windows</h2>
-        <p>Each window can hold one primary candidate plus a nearby backup if the venue timing is tight or tickets disappear.</p>
+        <h2 id="windows-title">Six slot day shape</h2>
+        <p>Slots 1-4 are show-first. Slot 5 is protected for dinner. Slot 6 is for a late show, music, or wildcard.</p>
       </div>
-      <div class="window-strip" aria-label="Daytime festival windows">
-        <div class="window"><b>10:00-12:00</b><span>Morning review-backed option</span></div>
-        <div class="window"><b>12:00-14:00</b><span>Late morning or lunch-adjacent slot</span></div>
-        <div class="window"><b>14:00-16:00</b><span>Afternoon priority candidate</span></div>
-        <div class="window"><b>16:00-18:00</b><span>Early evening bridge slot</span></div>
+      <div class="window-strip" aria-label="Festival planning windows">
+        <div class="window"><b>Slot 1</b><span>10:00-12:00 show</span></div>
+        <div class="window"><b>Slot 2</b><span>12:00-14:00 show</span></div>
+        <div class="window"><b>Slot 3</b><span>14:00-16:00 show</span></div>
+        <div class="window"><b>Slot 4</b><span>16:00-18:00 show</span></div>
+        <div class="window dinner"><b>Slot 5</b><span>18:00-21:00 dinner</span></div>
+        <div class="window"><b>Slot 6</b><span>21:00-24:00 late option</span></div>
       </div>
     </section>
 
@@ -820,7 +937,7 @@
       <div class="schedule-head">
         <div class="section-heading">
           <h2 id="schedule-title">Show shortlist</h2>
-          <p>Seeded with real 2026 listings and review signals. Filter by rating or Edinburgh history, then update the cards as better review evidence appears.</p>
+          <p>Seeded with real 2026 listings and review signals. Filter by rating, Edinburgh history, slot, genre bias, and programme priority, then update cards as stronger review evidence appears.</p>
         </div>
         <div class="tabs" role="tablist" aria-label="Show categories">
           <button class="tab-button" type="button" role="tab" id="priority-tab" aria-selected="true" aria-controls="priority-panel">Priority Matches</button>
@@ -851,19 +968,42 @@
           <label for="windowFilter">Time window</label>
           <select id="windowFilter">
             <option value="all">All times</option>
-            <option value="10-12">10:00-12:00</option>
-            <option value="12-14">12:00-14:00</option>
-            <option value="14-16">14:00-16:00</option>
-            <option value="16-18">16:00-18:00</option>
-            <option value="outside">Outside daytime plan</option>
+            <option value="10-12">Slot 1: 10:00-12:00</option>
+            <option value="12-14">Slot 2: 12:00-14:00</option>
+            <option value="14-16">Slot 3: 14:00-16:00</option>
+            <option value="16-18">Slot 4: 16:00-18:00</option>
+            <option value="18-21">Slot 5: dinner time</option>
+            <option value="21-24">Slot 6: late</option>
             <option value="unknown">Time to confirm</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label for="genreFilter">Genre bias</label>
+          <select id="genreFilter">
+            <option value="all">All genres</option>
+            <option value="theatre">Theatre</option>
+            <option value="comedic-theatre">Comedic theatre</option>
+            <option value="music">Music</option>
+            <option value="standup">Stand-up</option>
+            <option value="circus">Circus / magic</option>
+            <option value="wildcard">Wildcard weird</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label for="programmeFilter">Programme</label>
+          <select id="programmeFilter">
+            <option value="all">All programmes</option>
+            <option value="fringe">Fringe priority</option>
+            <option value="traverse">Traverse priority</option>
+            <option value="eif">EIF priority</option>
+            <option value="outside">Outside priority list</option>
           </select>
         </div>
       </div>
 
       <div class="tab-panel active" id="priority-panel" role="tabpanel" aria-labelledby="priority-tab">
         <div class="slot-grid">
-          <article class="slot-card show-item" data-rating="5" data-history="returning" data-window="10-12">
+          <article class="slot-card show-item" data-rating="5" data-history="returning" data-window="10-12" data-genre="theatre" data-programme="fringe">
             <div class="slot-time">11:00<span>10:00-12:00 window</span></div>
             <div class="slot-body">
               <div class="show-summary">
@@ -882,7 +1022,7 @@
               </ul>
             </div>
           </article>
-          <article class="slot-card show-item" data-rating="5" data-history="returning" data-window="12-14">
+          <article class="slot-card show-item" data-rating="5" data-history="returning" data-window="12-14" data-genre="theatre" data-programme="fringe">
             <div class="slot-time">13:35<span>12:00-14:00 window</span></div>
             <div class="slot-body">
               <div class="show-summary">
@@ -901,7 +1041,7 @@
               </ul>
             </div>
           </article>
-          <article class="slot-card show-item" data-rating="unrated" data-history="first" data-window="14-16">
+          <article class="slot-card show-item" data-rating="unrated" data-history="first" data-window="14-16" data-genre="theatre" data-programme="fringe">
             <div class="slot-time">15:00<span>14:00-16:00 window</span></div>
             <div class="slot-body">
               <div class="show-summary">
@@ -920,7 +1060,7 @@
               </ul>
             </div>
           </article>
-          <article class="slot-card show-item" data-rating="5" data-history="returning" data-window="16-18">
+          <article class="slot-card show-item" data-rating="5" data-history="returning" data-window="16-18" data-genre="comedic-theatre" data-programme="fringe">
             <div class="slot-time">17:35<span>16:00-18:00 window</span></div>
             <div class="slot-body">
               <div class="show-summary">
@@ -945,7 +1085,7 @@
 
       <div class="tab-panel" id="other-panel" role="tabpanel" aria-labelledby="other-tab">
         <div class="show-grid">
-          <article class="show-card show-item" data-rating="4" data-history="returning" data-window="outside">
+          <article class="show-card show-item" data-rating="4" data-history="returning" data-window="18-21" data-genre="circus" data-programme="fringe">
             <div class="show-summary">
               <h3>Tell Me</h3>
               <a class="show-link" href="https://www.edfringe.com/tickets/whats-on/tell-me" target="_blank" rel="noreferrer">Show page</a>
@@ -961,7 +1101,7 @@
               <li><a href="https://www.edfringe.com/about-us/news-and-blog/made-in-scotland-2026-showcase-launches-for-fringe-2026/" target="_blank" rel="noreferrer">Made in Scotland</a></li>
             </ul>
           </article>
-          <article class="show-card show-item" data-rating="5" data-history="returning" data-window="unknown">
+          <article class="show-card show-item" data-rating="5" data-history="returning" data-window="unknown" data-genre="circus" data-programme="fringe">
             <div class="show-summary">
               <h3>1 Hour of Insane Magic</h3>
               <a class="show-link" href="https://www.edfringe.com/tickets/whats-on/1-hour-of-insane-magic" target="_blank" rel="noreferrer">Show page</a>
@@ -977,7 +1117,7 @@
               <li><a href="https://www.insanemagic.co.uk/" target="_blank" rel="noreferrer">Company site</a></li>
             </ul>
           </article>
-          <article class="show-card show-item" data-rating="unrated" data-history="first" data-window="unknown">
+          <article class="show-card show-item" data-rating="unrated" data-history="first" data-window="unknown" data-genre="theatre" data-programme="fringe">
             <div class="show-summary">
               <h3>Roleplay</h3>
               <a class="show-link" href="https://www.theguardian.com/stage/2026/jun/04/edinburgh-festival-2026-must-see-theatre" target="_blank" rel="noreferrer">Guardian pick</a>
@@ -998,6 +1138,57 @@
       </div>
     </section>
 
+    <section class="dinner-plan" aria-labelledby="dinner-title">
+      <div class="section-heading">
+        <h2 id="dinner-title">Dinner slot planning</h2>
+        <p>Slot 5 is protected for restaurant dinners. Target eight people, Sat-Thu, with a mix of well-rated about GBP100/head and about GBP50/head options within a 20-minute walk of Edinburgh Playhouse / Greenside. Keep Leith out of scope.</p>
+      </div>
+      <ul class="agenda-list" aria-label="Dinner coverage">
+        <li><b>Fri</b><span>Arrival dinner slot from 18:00</span></li>
+        <li><b>Sat</b><span>Book for 8 near Playhouse</span></li>
+        <li><b>Sun</b><span>Book for 8 near Playhouse</span></li>
+        <li><b>Mon</b><span>Book for 8 near Playhouse</span></li>
+        <li><b>Tue</b><span>Book for 8 near Playhouse</span></li>
+        <li><b>Wed</b><span>Book for 8 near Playhouse</span></li>
+        <li><b>Thu</b><span>Book for 8 near Playhouse</span></li>
+      </ul>
+      <div class="restaurant-grid" aria-label="Restaurant candidate examples">
+        <article class="restaurant-card">
+          <h3>Mamma Roma</h3>
+          <p>Italian option close to Edinburgh Playhouse. Useful as a GBP50/head-style candidate if group tables are available.</p>
+          <div class="badge-row">
+            <span class="badge">Near Playhouse</span>
+            <span class="badge">GBP50 target</span>
+            <span class="badge clay">Verify table for 8</span>
+          </div>
+          <ul class="source-list">
+            <li><a href="https://mammaromaedinburgh.co.uk/" target="_blank" rel="noreferrer">Restaurant site</a></li>
+          </ul>
+        </article>
+        <article class="restaurant-card">
+          <h3>Hawksmoor Edinburgh</h3>
+          <p>Higher-spend steak/seafood candidate in central Edinburgh. Good fit for the GBP100/head mix if the walking route and availability work.</p>
+          <div class="badge-row">
+            <span class="badge gold">GBP100 target</span>
+            <span class="badge">Central</span>
+            <span class="badge clay">Walk check</span>
+          </div>
+          <ul class="source-list">
+            <li><a href="https://thehawksmoor.com/locations/edinburgh/" target="_blank" rel="noreferrer">Restaurant site</a></li>
+          </ul>
+        </article>
+        <article class="restaurant-card">
+          <h3>Wildcard dinner</h3>
+          <p>One dinner can be a longer walk if it is genuinely worth it. Keep it non-Leith unless the group explicitly overrides the brief.</p>
+          <div class="badge-row">
+            <span class="badge plum">1 wildcard allowed</span>
+            <span class="badge clay">No Leith</span>
+            <span class="badge">Worth-it test</span>
+          </div>
+        </article>
+      </div>
+    </section>
+
     <section class="links" aria-labelledby="links-title">
       <h2 id="links-title">Research links</h2>
       <ul>
@@ -1005,6 +1196,7 @@
         <li><a href="https://www.eif.co.uk/" target="_blank" rel="noreferrer">Edinburgh International Festival</a><span>Programme and major events</span></li>
         <li><a href="https://www.theguardian.com/stage/edinburghfestival" target="_blank" rel="noreferrer">The Guardian Edinburgh Festival coverage</a><span>National reviews and recommendations</span></li>
         <li><a href="https://www.timeout.com/edinburgh" target="_blank" rel="noreferrer">Time Out Edinburgh</a><span>Festival picks and city context</span></li>
+        <li><a href="https://www.traverse.co.uk/" target="_blank" rel="noreferrer">Traverse Theatre</a><span>Priority theatre venue</span></li>
       </ul>
     </section>
 
@@ -1017,17 +1209,18 @@
     <div class="dialog-head">
       <div>
         <h2>Selection criteria</h2>
-        <p>Use these signals to decide what belongs in the main shortlist.</p>
+        <p>Use these rules to decide what belongs in the main schedule.</p>
       </div>
       <button class="close-button" type="button" id="closeCriteria" aria-label="Close criteria">x</button>
     </div>
     <div class="dialog-body">
       <ul class="criteria-list">
-        <li><b>1</b><span><strong>Known director or company</strong>Prioritise shows from a recognised director, company, writer, performer, or creative team.</span></li>
-        <li><b>2</b><span><strong>Five-star reviews</strong>Prefer shows with five-star reviews from credible publications or established reviewers.</span></li>
-        <li><b>3</b><span><strong>Nationally reviewed</strong>Look for coverage from national newspapers, major arts publications, or widely read review outlets.</span></li>
-        <li><b>4</b><span><strong>Returning or proven festival signal</strong>Flag shows that appear to have returned after a strong previous Edinburgh run or similar festival success.</span></li>
-        <li><b>5</b><span><strong>Fits the daytime plan</strong>Main candidates should run between 10:00 and 18:00 and fit cleanly into a two-hour planning window.</span></li>
+        <li><b>1</b><span><strong>Slot fit first</strong>Use six slots Sat-Thu: 10-12, 12-14, 14-16, 16-18, dinner 18-21, and late 21-24. First Friday starts from 17:00 with three slots.</span></li>
+        <li><b>2</b><span><strong>Review confidence</strong>Prefer multiple reputable five-star reviews from 2025 or 2024. Single reviews can be noisy, so mark them as weaker signals.</span></li>
+        <li><b>3</b><span><strong>Producer and insider signals</strong>Prioritise reputable producers such as Francesca Moody and informed picks from Time Out, Guardian, Times, Scotsman, and similar outlets.</span></li>
+        <li><b>4</b><span><strong>Genre and programme bias</strong>Bias theatre, comedic theatre, and music over stand-up and circus. Treat Fringe, Traverse Theatre, and EIF as priority programmes.</span></li>
+        <li><b>5</b><span><strong>Wildcards</strong>Allow two to four weird wildcard shows, but label them clearly so they remain deliberate choices.</span></li>
+        <li><b>6</b><span><strong>Dinner rule</strong>Slot 5 is dinner. Book Sat-Thu tables for eight near Edinburgh Playhouse / Greenside, mixing about GBP100/head and GBP50/head options, with one longer-walk wildcard allowed and no Leith restaurants.</span></li>
       </ul>
     </div>
   </dialog>
@@ -1077,12 +1270,16 @@
       const rating = document.getElementById("ratingFilter").value;
       const history = document.getElementById("historyFilter").value;
       const windowValue = document.getElementById("windowFilter").value;
+      const genre = document.getElementById("genreFilter").value;
+      const programme = document.getElementById("programmeFilter").value;
 
       showItems.forEach((item) => {
         const ratingMatch = rating === "all" || item.dataset.rating === rating;
         const historyMatch = history === "all" || item.dataset.history === history;
         const windowMatch = windowValue === "all" || item.dataset.window === windowValue;
-        item.classList.toggle("is-hidden", !(ratingMatch && historyMatch && windowMatch));
+        const genreMatch = genre === "all" || item.dataset.genre === genre;
+        const programmeMatch = programme === "all" || item.dataset.programme === programme;
+        item.classList.toggle("is-hidden", !(ratingMatch && historyMatch && windowMatch && genreMatch && programmeMatch));
       });
 
       emptyStates.forEach((emptyState) => {
