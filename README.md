@@ -20,6 +20,8 @@ Day 7: Thursday 13 August 2026
 
 The day-by-day plan uses real 2026 show listings and real restaurant suggestions, but nothing in the repo is a booking confirmation. Treat every show, table, and walking transfer as needing a final check before purchase or reservation.
 
+The day-by-day plan should not repeat show titles. If there is not enough confidence for a slot yet, leave it as a review hold rather than recycling an earlier recommendation.
+
 ## Trip Slot Model
 
 Use six two-to-three-hour slots across Saturday to Thursday:
@@ -85,9 +87,17 @@ The current page includes real 2026 examples to show how the data should be capt
 - `Hard to Swallow: Reuben Kaye` - 20:00, closest first-week Reuben Kaye / Kaye Hole match.
 - `Mark Thomas: 40 in Stand-Up Years` - 18:00, closest 2026 match for the `England & Son` preference.
 - `The Jolly Fisherman` - 12:45, Guardian preview pick, but needs reviews.
+- `An Audience with Virginia Woolf: Writing One's Mind` - 11:00, Fringe First-winning director and five-star Off-Broadway signal.
+- `An Ode to the Casting Director` - 12:00, returning five-star sell-out show and Fringe Theatre Award winner.
+- `The Big Bite-Size Breakfast Show` - morning / various times, FringeReview and WhatsOnStage five-star signals.
 - `Medicine` - EIF / Traverse option at 20:00 or 14:00 depending on date.
 - `Supposing:` - Traverse world premiere by Zinnie Harris, strong known-director signal, availability risk.
+- `Collaborator` - 17:00, Ockham's Razor physical theatre / circus with known-company signal.
 - `NON HUMAN ANIMAL` - 16:00, Kat Woods known-creator signal, reviews pending.
+- `Stamptown` - 21:50, late variety / clown / cabaret with Chortle five-star and Guardian four-star signals.
+- `Shamilton! The Improvised Hip-Hop Musical` - 19:50, improv musical with five-star and four-star signals.
+- `The Real Housewives of the Zombie Apocalypse` - 19:35, Scottish high-camp satire with five-star and four-star signals.
+- `Schalk Bezuidenhout: Hey Hey Divorcè` - 21:00, international stand-up with EdFringeReview five-star signal.
 - `The Singer` - Traverse late music-theatre option with music and lyrics by KT Tunstall, availability risk.
 - `Tell Me` - 19:00, strong company/review signal but outside the daytime window.
 - `1 Hour of Insane Magic` - five-star signal and prior Edinburgh history, but exact daytime fit needs checking.
